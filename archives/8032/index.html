@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="常识区  git add . &#x2F;&#x2F; 更新到暂存区   git commit -m &quot;feat: 添加 Hello.ts 页面&quot; &#x2F;&#x2F; 更新到资源库     &#x2F;&#x2F; 提交规范:     1. feat: 增加新功能     2. fix: 修复bug     3. docs: 只改动了文档相关内容     4. styles: 不影响代码的含义的改动，如：去掉空格、缩进、增删分号等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git基本操作，一篇文章就够了">
+<meta property="og:url" content="http://example.com/archives/8032/index.html">
+<meta property="og:site_name" content="Alileew&#39;s Blog">
+<meta property="og:description" content="常识区  git add . &#x2F;&#x2F; 更新到暂存区   git commit -m &quot;feat: 添加 Hello.ts 页面&quot; &#x2F;&#x2F; 更新到资源库     &#x2F;&#x2F; 提交规范:     1. feat: 增加新功能     2. fix: 修复bug     3. docs: 只改动了文档相关内容     4. styles: 不影响代码的含义的改动，如：去掉空格、缩进、增删分号等">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-10-10T14:27:56.000Z">
+<meta property="article:modified_time" content="2022-04-04T03:12:57.857Z">
+<meta property="article:author" content="Alileew">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>git基本操作，一篇文章就够了</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+    
+  <!-- highlight plugin css cdn -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/atom-one-dark.min.css"
+    integrity="sha512-Jk4AqjWsdSzSWCSuQTfYRIF84Rq/eV0G2+tu07byYwHcbTGfdmLrHjUSwvzp5HvbiqK4ibmNwdcG49Y5RGYPTg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+	<!-- mathjax -->
+	
+
+  <!-- highlight plugin js cdn -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"
+    integrity="sha512-BNc7saQYlxCL10lykUYhFBcnzdKMnjx5fp5s5wPucDyZ7rKNwCoqJh1GwEAIhuePEK4WM9askJBRsu7ma0Rzvg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Archives</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/alileew">Projects</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/archives/37989/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/archives/8032/"
+      ><i class="fab fa-facebook " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/archives/8032/&text=git基本操作，一篇文章就够了"
+      ><i class="fab fa-twitter " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/archives/8032/&title=git基本操作，一篇文章就够了"
+      ><i class="fab fa-linkedin " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/archives/8032/&is_video=false&description=git基本操作，一篇文章就够了"
+      ><i class="fab fa-pinterest " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      href="mailto:?subject=git基本操作，一篇文章就够了&body=Check out this article: http://example.com/archives/8032/"
+      ><i class="fas fa-envelope " aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/archives/8032/&title=git基本操作，一篇文章就够了"
+      ><i
+        class="fab fa-get-pocket "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/archives/8032/&title=git基本操作，一篇文章就够了"
+      ><i class="fab fa-reddit " aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/archives/8032/&title=git基本操作，一篇文章就够了"
+      ><i
+        class="fab fa-stumbleupon "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/archives/8032/&title=git基本操作，一篇文章就够了"
+      ><i class="fab fa-digg " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/archives/8032/&name=git基本操作，一篇文章就够了&description="
+      ><i class="fab fa-tumblr " aria-hidden="true"></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/archives/8032/&t=git基本操作，一篇文章就够了"
+      ><i
+        class="fab fa-hacker-news "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%AF%86%E5%8C%BA"><span class="toc-number">1.</span> <span class="toc-text">常识区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E7%82%B9%E5%8C%BA"><span class="toc-number">2.</span> <span class="toc-text">重点区</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        git基本操作，一篇文章就够了
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Alileew</span>
+      </span>|  -->
+      <span id="busuanzi_container_page_pv" style='display: none'>
+        <i class="fa fa-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> | 
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-10-10T14:27:56.000Z" itemprop="datePublished">2021-10-10</time>
+        
+      
+    </div>
+
+
+      <span class="post-count">| 1.1k字</span>
+      <span class="post-count">| 4分钟</span>
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/git/" rel="tag">git</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="常识区"><a href="#常识区" class="headerlink" title="常识区"></a>常识区</h2><pre><code class="javascript">  git add . // 更新到暂存区
+  git commit -m &quot;feat: 添加 Hello.ts 页面&quot; // 更新到资源库
+    // 提交规范:
+    1. feat: 增加新功能
+    2. fix: 修复bug
+    3. docs: 只改动了文档相关内容
+    4. styles: 不影响代码的含义的改动，如：去掉空格、缩进、增删分号等
+    5. build: 构造工具或者外部依赖的改动 如webpack、npm等
+    6: refactor: 代码重构时作用
+  git commit --amend // vim中修改内容信息
+  git push // 提交至远程仓库
+
+  git branch -D &lt;BranchName&gt; // 删除本地分支
+    git push origin --delete &lt;BranchName&gt;  // 真正的删除远程分支
+</code></pre>
+<h2 id="重点区"><a href="#重点区" class="headerlink" title="重点区"></a>重点区</h2><pre><code class="javascript">  [git reset &amp; git revet]
+
+  1. git如何撤销上一次commit操作 ???
+
+  // 最后一次提交的修改，包括本地文件的修改都会被清除，彻底还原到上一次提交的状态且无法找回。
+  // 所以在执行reset --hard之前一定要小心
+  `git reset --hard HEAD~` 或者指定回退提交的commidHash `git reset --hard &lt;commitHash&gt;`
+
+  // 重置HEAD到指定的版本, 不会修改index和working tree
+  `git reset --soft &lt;commitHash&gt;`
+
+
+    git reset (--mixed) HEAD~1 
+    回退一个版本,且会将暂存区的内容和本地已提交的内容全部恢复到未暂存的状态,不影响原来本地文件(未提交的也 不受影响) 回退后的代码（已提交的内容）放在工作区，工作区和暂存区的修改都会留下
+
+    git reset --soft HEAD~1 
+    回退一个版本,不清空暂存区,将已提交的内容恢复到暂存区,不影响原来本地的文件(未提交的也不受影响) 
+    将已提交的内容恢复到暂存区，原来暂存区和工作区的内容仍然保留
+
+    git reset --hard HEAD~1 
+    回退一个版本,清空暂存区,将已提交的内容的版本恢复到本地,本地的文件也将被恢复的版本替换
+    已提交的内容恢复到工作区，原来工作区中的修改会留下，原来暂存区中的内容会消失
+
+  --mixed  会保留源码,只是将git commit和index 信息回退到了某个版本.
+  --soft   保留源码,只回退到commit信息到某个版本.不涉及index的回退,如果还需要提交,直接commit即可.
+  --hard   源码也会回退到某个版本,commit和index 都会回退到某个版本.(注意,这种方式是改变本地代码仓库源码)
+
+  2. commit push 代码已经更新到远程仓库 如何撤销 ？？？
+
+  // revert 之后你的本地代码会回滚到指定的历史版本,这时你再 git push 既可以把线上的代码更新
+  `git revert &lt;commit_id&gt;`
+  // 注意：git revert是用一次新的commit来回滚之前的commit，git reset是直接删除指定的commit，看似达到的效果是一样的,其实完全不同。
+</code></pre>
+<pre><code class="javascript">  [git stash]
+
+  // 全部未保存的代码添加到储藏
+  git stash 或 git stash save &quot;message&quot;
+    1. git stash pop // 应用第一个储藏并删除，如果pop对应项，则直接pop后面跟对应的序列号就可以
+    2. git stash apply // 应用第一个储藏但依然保留在列表项中。
+    3. git stash list // 查看stash列表
+    4. git stash drop stash@&#123;xxx&#125; // 删除某项储藏
+    5. git stash clear // 删除所有储藏的stash
+</code></pre>
+<pre><code class="javascript">  [git cherry-pick]
+
+  // 将指定的提交（commit）应用于其他分支。
+  git cherry-pick &lt;commitHash&gt;
+
+   a - b - c - d   Master
+         \
+           e - f - g Feature
+
+  现在将提交 f 应用到 master 分支。，切换到 master 分支 `git checkout master` 然后执行 `git cherry-pick f`
+
+   a - b - c - d - f   Master
+       \
+         e - f - g Feature
+
+小知识：
+  1. git cherry-pick 命令的参数，不一定是提交的哈希值，分支名也是可以的，表示转移该分支的最新提交
+     &gt; git cherry-pick feature // feature分支的最近一次提交，转移到当前分支。
+
+  2. 如果需要同时 cherry-pick多个 &lt;commitHash&gt;
+    &gt; git cherry-pick &lt;commitHash1&gt; &lt;commitHash2&gt;
+
+  3. 想要在不同分支间 高效的使用 cherry-pick，提交代码的细粒度必须要小，且每次提交的功能点尽量单一
+     如：功能点都是可复用的业务逻辑，才能更好的高效复用。
+</code></pre>
+<pre><code class="javascript">  [git rebase]
+
+  git stash // 贮藏本地代码
+
+  git pull origin latest --rebase // 拉取远程latest分支代码
+
+  git stash pop // 还原本地贮藏代码
+</code></pre>
+
+  </div>
+</article>
+ 
+<!-- 下面添加 Gitalk 部分 -->
+
+
+<!-- valine Comments -->
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<!-- <script src="https://cdn.fayne.cn/js/Valine.min.js"></script> -->
+<div id="vcomments" style="margin-top: 30px"></div>
+<script type="text/javascript">
+  new Valine({
+    el: "#vcomments",
+    appId: "5Ah2dYXOOS7ryWdhr9z0BP9h-gzGzoHsz",
+    appKey: "JxuAq1gr9Q2b54FVIAj0bIcp",
+    avatar: "retro",
+    placeholder: "说点什么？证明你来过 ~",
+    pageSize: 10,
+  });
+</script>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/alileew">Projects</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%AF%86%E5%8C%BA"><span class="toc-number">1.</span> <span class="toc-text">常识区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E7%82%B9%E5%8C%BA"><span class="toc-number">2.</span> <span class="toc-text">重点区</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/archives/8032/"
+      ><i class="fab fa-facebook fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/archives/8032/&text=git基本操作，一篇文章就够了"
+      ><i class="fab fa-twitter fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/archives/8032/&title=git基本操作，一篇文章就够了"
+      ><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/archives/8032/&is_video=false&description=git基本操作，一篇文章就够了"
+      ><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      href="mailto:?subject=git基本操作，一篇文章就够了&body=Check out this article: http://example.com/archives/8032/"
+      ><i class="fas fa-envelope fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/archives/8032/&title=git基本操作，一篇文章就够了"
+      ><i
+        class="fab fa-get-pocket fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/archives/8032/&title=git基本操作，一篇文章就够了"
+      ><i class="fab fa-reddit fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/archives/8032/&title=git基本操作，一篇文章就够了"
+      ><i
+        class="fab fa-stumbleupon fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/archives/8032/&title=git基本操作，一篇文章就够了"
+      ><i class="fab fa-digg fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/archives/8032/&name=git基本操作，一篇文章就够了&description="
+      ><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/archives/8032/&t=git基本操作，一篇文章就够了"
+      ><i
+        class="fab fa-hacker-news fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;   2021-2022
+    Alileew
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       -->
+        <li>
+          <a href="/"
+            >Home</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/archives/"
+            >Archives</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a target="_blank" rel="noopener" href="https://github.com/alileew"
+            >Projects</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/tags/"
+            >Tags</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/about/"
+            >About</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/search/"
+            >Search</a
+          >
+        </li>
+        <!--
+     -->
+      </ul>
+    </nav>
+  </div>
+  <div style="width: 100%; margin-top: 10px; text-align: center">
+    你的努力, 值得被更多人看见, 正如现在努力的你 
+    <!-- <span id="busuanzi_container_site_pv" style='display:none'>
+      <i class="fa fa-eye" aria-hidden="true"></i>
+      <span id="busuanzi_value_site_pv"></span>
+    </span>  -->
+    <!-- <span id="busuanzi_container_site_uv" style='display:none'>
+      <i class="fa fa-user" aria-hidden="true"></i>
+      <span id="busuanzi_value_site_uv"></span>
+    </span> -->
+  </div>
+</footer>
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+<!-- tag cloud 样式引入 -->
+<link
+  rel="stylesheet"
+  href="/css/tags.css"
+/>
+<link
+  rel="stylesheet"
+  href="/css/matery.css"
+/>
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- busuanzi -->
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a88fecc80aabf2ada5465a20dae69ae9";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+<script type="text/javascript">
+  var typed = new Typed('#home_faith', {
+    strings: ["坚持, 有常, 是成事的第一要素. 日日行, 不怕千万里. 常常做, 不怕千万事."],
+    typeSpeed: 100,
+    cursorChar: '',
+  });
+</script>
+<script type="text/javascript">
+  var typed = new Typed('#faith', {
+    strings: ["坚持, 有常, 是成事的第一要素. 日日行, 不怕千万里. 常常做, 不怕千万事."],
+    typeSpeed: 100,
+    cursorChar: '',
+  });
+</script>
+<script type="text/javascript">
+  var typed = new Typed('#text-slider', {
+    strings: ["你似乎来到了没有知识存在的荒原"],
+    typeSpeed: 100, // 打字速度
+    backSpeed: 50, // 回退速度(多个数组的时候，才生效)
+    cursorChar: '|',
+  });
+</script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>
+<script type="text/javascript">
+  // 切换 背景主题
+  function switchNightMode() {
+    $("body").hasClass("LightMode")
+      ? ($("body").removeClass("LightMode"),
+        localStorage.setItem("themeMode", "dark"),
+        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o"))
+      : ($("body").addClass("LightMode"),
+        localStorage.setItem("themeMode", "white"),
+        $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o"))
+  }
+</script>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', (event) => {
+    (localStorage.getItem('themeMode') === 'dark') 
+      ? (
+        document.querySelector('body').classList.remove('dark'),
+        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o")
+      )
+      :(
+        $("body").addClass("LightMode"),
+        $("#nightMode").removeClass("fa-moon-o").addClass('fa-lightbulb-o')
+      )
+  })
+</script>
+<div onclick="switchNightMode()" id="sma" title="切换主题">
+  <i class="fa fa-moon-o" id="nightMode"  aria-hidden="false"></i>
+</div>
