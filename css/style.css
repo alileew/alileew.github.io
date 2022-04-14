@@ -1306,6 +1306,7 @@ code {
 .pagination {
   display: inline-block;
   margin-top: 2rem;
+  margin-bottom: 3.5em;
   width: 100%;
   text-align: center;
 }
