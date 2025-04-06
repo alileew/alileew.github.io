@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="git 常用命令速查表 git-601637982348.png  上篇文章 git 基本操作，一篇文章就够了，介绍了日常使用 git 的一些操作，接下来介绍下 git 的一些高级用法，提升你对 git 新的认识。 消除最近的几次提交已经 push 的代码，有些 commit 确确实实是不想要的，暂存区和工作区都恢复成你指定的那个 commit 的内容了 如图所示，我需要将代码恢复到 cbb258">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git高级命令: reset&#x2F;merge&#x2F;rebase 图形化手把手教学">
+<meta property="og:url" content="http://example.com/archives/62141/index.html">
+<meta property="og:site_name" content="Alileew&#39;s Blog">
+<meta property="og:description" content="git 常用命令速查表 git-601637982348.png  上篇文章 git 基本操作，一篇文章就够了，介绍了日常使用 git 的一些操作，接下来介绍下 git 的一些高级用法，提升你对 git 新的认识。 消除最近的几次提交已经 push 的代码，有些 commit 确确实实是不想要的，暂存区和工作区都恢复成你指定的那个 commit 的内容了 如图所示，我需要将代码恢复到 cbb258">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/601637982348.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127111935.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127112216.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127112913.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127113123.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127113326.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127113406.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127113553.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127113920.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127164246.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127164024.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127164422.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127164503.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127164653.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127164955.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127165058.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127165135.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127165217.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127165250.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127165413.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127165804.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127165922.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127170023.png">
+<meta property="article:published_time" content="2021-11-27T03:03:55.000Z">
+<meta property="article:modified_time" content="2022-04-04T03:04:11.000Z">
+<meta property="article:author" content="alileew">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/601637982348.jpg">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>git高级命令: reset/merge/rebase 图形化手把手教学</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+    
+  <!-- highlight plugin css cdn -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/atom-one-dark.min.css"
+    integrity="sha512-Jk4AqjWsdSzSWCSuQTfYRIF84Rq/eV0G2+tu07byYwHcbTGfdmLrHjUSwvzp5HvbiqK4ibmNwdcG49Y5RGYPTg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+	<!-- mathjax -->
+	
+
+  <!-- highlight plugin js cdn -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"
+    integrity="sha512-BNc7saQYlxCL10lykUYhFBcnzdKMnjx5fp5s5wPucDyZ7rKNwCoqJh1GwEAIhuePEK4WM9askJBRsu7ma0Rzvg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Archives</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/alileew">Projects</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/archives/58499/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/archives/37989/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/archives/62141/"
+      ><i class="fab fa-facebook " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/archives/62141/&text=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i class="fab fa-twitter " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/archives/62141/&title=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i class="fab fa-linkedin " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/archives/62141/&is_video=false&description=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i class="fab fa-pinterest " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      href="mailto:?subject=git高级命令: reset/merge/rebase 图形化手把手教学&body=Check out this article: http://example.com/archives/62141/"
+      ><i class="fas fa-envelope " aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/archives/62141/&title=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i
+        class="fab fa-get-pocket "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/archives/62141/&title=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i class="fab fa-reddit " aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/archives/62141/&title=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i
+        class="fab fa-stumbleupon "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/archives/62141/&title=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i class="fab fa-digg " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/archives/62141/&name=git高级命令: reset/merge/rebase 图形化手把手教学&description="
+      ><i class="fab fa-tumblr " aria-hidden="true"></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/archives/62141/&t=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i
+        class="fab fa-hacker-news "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#git-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5%E8%A1%A8"><span class="toc-number">1.</span> <span class="toc-text">git 常用命令速查表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E9%99%A4%E6%9C%80%E8%BF%91%E7%9A%84%E5%87%A0%E6%AC%A1%E6%8F%90%E4%BA%A4"><span class="toc-number">2.</span> <span class="toc-text">消除最近的几次提交</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E4%BA%A4%E6%9A%82%E5%AD%98%E5%8C%BA%E5%90%8E%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8B-diff"><span class="toc-number">3.</span> <span class="toc-text">提交暂存区后如何查看 diff</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%9C%80%E6%96%B0-commit-%E7%9A%84-message"><span class="toc-number">4.</span> <span class="toc-text">修改最新 commit 的 message</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E8%80%81%E6%97%A7-commit-%E7%9A%84-message"><span class="toc-number">5.</span> <span class="toc-text">修改老旧 commit 的 message</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%8A%E8%BF%9E%E7%BB%AD%E5%A4%9A%E4%B8%AA-commit-%E6%95%B4%E7%90%86%E6%88%901%E4%B8%AA"><span class="toc-number">6.</span> <span class="toc-text">把连续多个 commit 整理成1个</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%8A%E9%97%B4%E9%9A%94%E5%87%A0%E4%B8%AA-commit-%E6%95%B4%E7%90%86%E6%88%901%E4%B8%AA"><span class="toc-number">7.</span> <span class="toc-text">把间隔几个 commit 整理成1个</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E6%9F%90%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6%E5%88%B0%E5%8F%A6%E5%A4%96%E4%B8%80%E4%B8%AA%E5%88%86%E6%94%AF"><span class="toc-number">8.</span> <span class="toc-text">将某分支合并到另外一个分支</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3-rebase-%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%86%B2%E7%AA%81"><span class="toc-number">9.</span> <span class="toc-text">解决 rebase 过程中的冲突</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post markdown-article" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        git高级命令: reset/merge/rebase 图形化手把手教学
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">alileew</span>
+      </span>|  -->
+      <!-- <span id="busuanzi_container_page_pv" style='display: none'>
+        <i class="fa fa-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> | 
+      </span> -->
+      
+    <div class="postdate">
+      
+        <time datetime="2021-11-27T03:03:55.000Z" itemprop="datePublished">2021-11-27</time>
+        
+      
+    </div>
+
+
+      <span class="post-count">| 2.3k字</span>
+      <span class="post-count">| 8分钟</span>
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/git/" rel="tag">git</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content markdown-content" itemprop="articleBody">
+    <h2 id="git-常用命令速查表"><a href="#git-常用命令速查表" class="headerlink" title="git 常用命令速查表"></a>git 常用命令速查表</h2><p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/601637982348.jpg"></p>
+<figcaption>git-601637982348.png</figcaption>
+
+<p>上篇文章 <a href="/archives/8032/">git 基本操作，一篇文章就够了</a>，介绍了日常使用 git 的一些操作，接下来介绍下 git 的一些高级用法，提升你对 git 新的认识。</p>
+<h2 id="消除最近的几次提交"><a href="#消除最近的几次提交" class="headerlink" title="消除最近的几次提交"></a>消除最近的几次提交</h2><p>已经 push 的代码，有些 commit 确确实实是不想要的，暂存区和工作区都恢复成你指定的那个 commit 的内容了 如图所示，我需要将代码恢复到 <code>cbb25868ec9ef</code> 这个 commit 所在的位置。<br><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127111935.png"></p>
+<figcaption>git-20211127111935.png</figcaption>
+
+<pre><code class="javascript">// 执行回退指令
+git reset --hard cbb25868ec9ef
+</code></pre>
+<p>reset 执行成功之后， <code>git log --graph</code> 查看提交记录。<br><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127112216.png"></p>
+<figcaption>git-20211127112216.png</figcaption>
+这样就可以删掉之前的提交，将其恢复到你当前执行的 commit hash 那个位置。因为此命令具有不可恢复性，所以在执行此条命令前，请确定你之前的提交是确确实实不想要的。
+
+<blockquote>
+<ol>
+<li>git revert 是用一次新的 commit 来回滚之前的 commit，git reset 是直接删除指定的 commit。</li>
+<li>git reset 是把 HEAD 向后移动了一下，而 git revert 是 HEAD 继续前进，只是新的 commit 的内容和要 revert 的内容正好相反，能够抵消要被 revert 的内容。</li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="提交暂存区后如何查看-diff"><a href="#提交暂存区后如何查看-diff" class="headerlink" title="提交暂存区后如何查看 diff"></a>提交暂存区后如何查看 diff</h2><p>diff 暂存区 也就是 git add . 后，还想查看 diff, 执行<code>git diff --cached</code> 后面可以跟具体要 diff 的文件，不写就默认 diff 的是所有在暂存区的文件。<br>比较不同分支，不同文件的差异，如何用命令行进行操作查看呢？</p>
+<pre><code class="javascript">// 比如 我们想对比 main 和 temp 分支的所有改动文件的diff差异
+git diff main temp
+
+// 如果只想对比其中的某个文件 在不同分支上的diff差异, 后面根据题的文件名就可以了
+git diff main temp -- index.html
+</code></pre>
+<hr>
+<h2 id="修改最新-commit-的-message"><a href="#修改最新-commit-的-message" class="headerlink" title="修改最新 commit 的 message"></a>修改最新 commit 的 message</h2><pre><code class="javascript">git commit --amend
+</code></pre>
+<hr>
+<h2 id="修改老旧-commit-的-message"><a href="#修改老旧-commit-的-message" class="headerlink" title="修改老旧 commit 的 message"></a>修改老旧 commit 的 message</h2><p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127112913.png"></p>
+<figcaption>git-20211127112913.png</figcaption>
+
+<pre><code class="javascript">// 就要用到变基操作，既然是变基，就要找到当前你需要更改message的父级提交
+git rebase -i cbb25868
+</code></pre>
+<p>此时会有一个交互的信息出来，如下图:<br><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127113123.png"></p>
+<figcaption>git-20211127113123.png</figcaption>
+此时根据提示，执行 `Commands`相应的操作，这里可以在第一个 `pick a4f74a5 refactor: edit text`
+
+<p>中更改第一个 <code>pick</code> 为 <code>r 或 reword</code> 即 <code>r a4f74a5 refactor: edit text</code>，然后保存退出。退出后，又将进入到具体你更改的那个 commit message 中.</p>
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127113326.png"></p>
+<figcaption>git-20211127113326.png</figcaption>
+
+<p>这个时候 重新修改你的 message 信息，然后保存退出就可以了，退出后，此时就会告知你修改已经成功了。</p>
+<p>【detached HEAD commitHash】分离头指针，步骤：git 会先分离头指针，然后在上面做调整，调整完毕之后，他还把最新的 commit 产生之后呢，又用一个指针指向他，也就是我们当前工作的这个 main 分支。<br><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127113406.png"></p>
+<figcaption>git-20211127113406.png</figcaption>
+
+<p>对比下修改前后的区别：<br><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127113553.png"></p>
+<figcaption>git-20211127113553.png</figcaption>
+
+<hr>
+<h2 id="把连续多个-commit-整理成1个"><a href="#把连续多个-commit-整理成1个" class="headerlink" title="把连续多个 commit 整理成1个"></a>把连续多个 commit 整理成1个</h2><p>前提是：此分支尚未推送至远程，只修该提交记录，对提交文件内容不做修改。<br>找到操作提交记录的父提交 commitId(如：<code>cbb25868ec</code> ，也可以理解为上一次提交记录 <code>git rebase -i cbb25868ec</code><br>1、找到像合并的那几个提交信息<br>2、想合并的几次提交前面的 pick 保留一个，其余想合并的提交将 pick 更新为 s，然后在 git 弹出的命令窗口中，添加修改提交记录信息，最后保存退出即可</p>
+<p>比如 我当前的 commit 记录中 这里的这两个记录都是关于编辑修改文字相关的提交<br><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127113920.png"></p>
+<figcaption>git-20211127113920.png</figcaption>
+
+<pre><code class="javascript">git rebase -i cbb25868ec
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127164246.png"></p>
+<figcaption>git-20211127164246.png</figcaption>
+
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127164024.png"></p>
+<figcaption>git-20211127164024.png</figcaption>
+
+<p>保持第一个前一个为 pick, 后面想要合并的 commit 使用 <code>s 或者 squash</code> 这样，就会把所有 <code>s</code> 标记的 commit 都合并到前一个第一个以 <code>pick</code> 开头的 commit。<br>上图 <code>:wq!</code> 保存退出后，进入到 commit 信息修改页面，对你需要合并后的 commit 编写具体的文案即可。<br><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127164422.png"></p>
+<figcaption>git-20211127164422.png</figcaption>
+
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127164503.png"></p>
+<figcaption>git-20211127164503.png</figcaption>
+
+<p>执行 <code>git log --graph</code> 前后对比。<br><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127164653.png"></p>
+<figcaption>git-20211127164653.png</figcaption>
+这个时候，连续的多个 commit 整理成 1 个 commit 就完成了。
+你可以会有疑惑 如果是不连续的呢，那接下来，我们尝试操作下不连续的。
+
+<hr>
+<h2 id="把间隔几个-commit-整理成1个"><a href="#把间隔几个-commit-整理成1个" class="headerlink" title="把间隔几个 commit 整理成1个"></a>把间隔几个 commit 整理成1个</h2><p>如何将 <code>间隔的几个commit整理成一个</code>的操作其实和 <code>连续的多个commit整理成1个</code> 操作其实差不多，只是在 rebase 交互的时候，移动其位置就可以了，话不多说，直接上代码。<br><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127164955.png"></p>
+<figcaption>git-20211127164955.png</figcaption>
+这里我新提交了三个 commit，对应下图红色框框中的部分，其中橙色框框中的部分为同一类修改，但是不是连续的，我想将这两个合并成一个 commit。
+
+<pre><code class="javascript">// 先找到操作提交记录的父提交为依据，这里以feat:create http server提交为依据，commitId 为 cbb25868
+git rebase -i cbb25868
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127165058.png"></p>
+<figcaption>git-20211127165058.png</figcaption>
+
+<p>调整 commit 的位置，老样子，需要被合并的 commitId 用 <code>s 或 squash</code> </p>
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127165135.png"></p>
+<figcaption>git-20211127165135.png</figcaption>
+
+<p>保存退出之后，可能会出现下面两种情况中的一种：</p>
+<ol>
+<li>如果没有直接进入到交互页面，而是直接退出了。执行 <code>git status</code> 之后，查看提示,<br>然后继续 <code>git rebase --continue</code> 执行此命令，就会继续进入到交互页面了。</li>
+<li>如果没有直接退出，就会直接弹下面的 <code>message</code> 修改交互页面，直接做相应的修改就可以。</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127165217.png"></p>
+<figcaption>git-20211127165217.png</figcaption>
+
+<p>修改完之后，保存退出 出现 successfully 就说明修改成功了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127165250.png"></p>
+<figcaption>git-20211127165250.png</figcaption>
+
+<p>接下来 我们执行 <code>git log --graph</code> 再来看看合并后的 commit 的前后变化</p>
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127165413.png"></p>
+<figcaption>git-20211127165413.png</figcaption>
+
+<p>这个时候，我们就把间隔的几个 commit 整理成 1 个了。</p>
+<hr>
+<h2 id="将某分支合并到另外一个分支"><a href="#将某分支合并到另外一个分支" class="headerlink" title="将某分支合并到另外一个分支"></a>将某分支合并到另外一个分支</h2><p>将一个分支的更改合并到另外一个分支中（一般是主分支同步更新到自己开发分支）<br>背景描述： main 分支是主分支，temp 和 test 是子分支，基于 main 分支</p>
+<p>通常情况下，我们使用的是 merge 的操作：<br>git:(temp) &gt; git merge main 此时，main 分支的代码将会被合并到 temp 分支（前提是 先要切换到 main 分支拉取最新的代码），这种方式的缺点有两个：</p>
+<ol>
+<li>必须要切换到主分支拉取最新的代码，在切回自己的分支进行 merge</li>
+<li>合并后的所有 commit 会按照提交时间从旧到新排列</li>
+<li>git 流程 会被打乱，直接上图</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127165804.png"></p>
+<figcaption>git-20211127165804.png</figcaption>
+
+<p>其次，还可以采用 rebase 的操作：<br>test 分支做了代码文件内容更改，合并到了 main 分支，此时我 temp 分支是落后于 main 分支的，此时我需要将远程主分支 main 的代码同步到 temp 分支。<br>主要命令：<code>git pull origin main --rebase</code> 此时 main 分支上最新的代码就全部被合并到 temp 分支上了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127165922.png"></p>
+<figcaption>git-20211127165922.png</figcaption>
+
+<p>使用 rebase 的优点有：</p>
+<ol>
+<li>改变当前分支从 master 上拉出分支的位置</li>
+<li>没有多余的合并历史的记录，且合并后的 commit 顺序不一定按照 commit 的提交时间排列</li>
+<li>可能会多次解决同一个地方的冲突（有 squash 来解决）</li>
+<li>更清爽一些，master 分支上每个 commit 点都是相对独立完整的功能单元</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211127170023.png"></p>
+<figcaption>git-20211127170023.png</figcaption>
+
+<blockquote>
+<p>那么 rebase 到底做了什么操作呢？<br>首先，git 会把 feature 分支里面的每个 commit 取消掉；<br>其次，把上面的操作临时保存成 patch 文件，存在 .git/rebase 目录下；<br>然后，把 feature 分支更新到最新的 master 分支；<br>最后，把上面保存的 patch 文件应用到 feature 分支上；</p>
+</blockquote>
+<p><code>git-rebase</code> 存在的价值是：对一个分支做<code>「变基」</code>操作。 1.当我们在一个过时的分支上面开发的时候，执行 rebase 以此同步 master 分支最新变动； 2.假如我们要启动一个放置了很久的并行工作，现在有时间来继续这件事情，很显然这个分支已经落后了。这时候需要在最新的基准上面开始工作，所以 rebase 是最合适的选择</p>
+<hr>
+<h2 id="解决-rebase-过程中的冲突"><a href="#解决-rebase-过程中的冲突" class="headerlink" title="解决 rebase 过程中的冲突"></a>解决 rebase 过程中的冲突</h2><p>关于冲突解决这块，使用以下几种方式处理这些冲突：</p>
+<pre><code class="javascript">1. git rebase --abort （表示放弃之前的rebase）
+  a. 会放弃合并，回到rebase操作之前的状态，之前的提交的不会丢弃；
+  b. 执行之后，本地内容会回到提交之间的状态，也就是回到以前提交但没有pull是的状态，简单来说就是撤销rebase。
+2. git rebase --skip （就是跳过这个rebase）
+  a. 则会将引起冲突的commits丢弃掉（使用skip时请慎重、慎用！！）；
+3. git rebase --continue （就是继续rebase）
+  a. 执行完 git pull --rebase 之后，如果有冲突，先是解决当前的页面的冲突
+  b. 然后git add . --&gt; git rebase --continue 如果再有，再解决，持续执行git add . --&gt; git rebase --continue
+4. 解决完冲突之后，控制台会一直提醒 git pull 不用去理会，一波强推 git push -f 就完事了
+</code></pre>
+
+  </div>
+</article>
+ 
+<!-- 下面添加 Gitalk 部分 -->
+
+
+<!-- valine Comments -->
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<!-- <script src="https://cdn.fayne.cn/js/Valine.min.js"></script> -->
+<div id="vcomments" style="margin-top: 30px"></div>
+<script type="text/javascript">
+  new Valine({
+    el: "#vcomments",
+    appId: "5Ah2dYXOOS7ryWdhr9z0BP9h-gzGzoHsz",
+    appKey: "JxuAq1gr9Q2b54FVIAj0bIcp",
+    avatar: "retro",
+    placeholder: "说点什么？证明你来过 ~",
+    pageSize: 10,
+  });
+</script>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/alileew">Projects</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#git-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5%E8%A1%A8"><span class="toc-number">1.</span> <span class="toc-text">git 常用命令速查表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E9%99%A4%E6%9C%80%E8%BF%91%E7%9A%84%E5%87%A0%E6%AC%A1%E6%8F%90%E4%BA%A4"><span class="toc-number">2.</span> <span class="toc-text">消除最近的几次提交</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E4%BA%A4%E6%9A%82%E5%AD%98%E5%8C%BA%E5%90%8E%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8B-diff"><span class="toc-number">3.</span> <span class="toc-text">提交暂存区后如何查看 diff</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%9C%80%E6%96%B0-commit-%E7%9A%84-message"><span class="toc-number">4.</span> <span class="toc-text">修改最新 commit 的 message</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E8%80%81%E6%97%A7-commit-%E7%9A%84-message"><span class="toc-number">5.</span> <span class="toc-text">修改老旧 commit 的 message</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%8A%E8%BF%9E%E7%BB%AD%E5%A4%9A%E4%B8%AA-commit-%E6%95%B4%E7%90%86%E6%88%901%E4%B8%AA"><span class="toc-number">6.</span> <span class="toc-text">把连续多个 commit 整理成1个</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%8A%E9%97%B4%E9%9A%94%E5%87%A0%E4%B8%AA-commit-%E6%95%B4%E7%90%86%E6%88%901%E4%B8%AA"><span class="toc-number">7.</span> <span class="toc-text">把间隔几个 commit 整理成1个</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86%E6%9F%90%E5%88%86%E6%94%AF%E5%90%88%E5%B9%B6%E5%88%B0%E5%8F%A6%E5%A4%96%E4%B8%80%E4%B8%AA%E5%88%86%E6%94%AF"><span class="toc-number">8.</span> <span class="toc-text">将某分支合并到另外一个分支</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3-rebase-%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E5%86%B2%E7%AA%81"><span class="toc-number">9.</span> <span class="toc-text">解决 rebase 过程中的冲突</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/archives/62141/"
+      ><i class="fab fa-facebook fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/archives/62141/&text=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i class="fab fa-twitter fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/archives/62141/&title=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/archives/62141/&is_video=false&description=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      href="mailto:?subject=git高级命令: reset/merge/rebase 图形化手把手教学&body=Check out this article: http://example.com/archives/62141/"
+      ><i class="fas fa-envelope fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/archives/62141/&title=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i
+        class="fab fa-get-pocket fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/archives/62141/&title=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i class="fab fa-reddit fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/archives/62141/&title=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i
+        class="fab fa-stumbleupon fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/archives/62141/&title=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i class="fab fa-digg fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/archives/62141/&name=git高级命令: reset/merge/rebase 图形化手把手教学&description="
+      ><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/archives/62141/&t=git高级命令: reset/merge/rebase 图形化手把手教学"
+      ><i
+        class="fab fa-hacker-news fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;   2021-2025
+    alileew
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       -->
+        <li>
+          <a href="/"
+            >Home</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/archives/"
+            >Archives</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a target="_blank" rel="noopener" href="https://github.com/alileew"
+            >Projects</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/tags/"
+            >Tags</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/about/"
+            >About</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/search/"
+            >Search</a
+          >
+        </li>
+        <!--
+     -->
+      </ul>
+    </nav>
+  </div>
+  <div style="width: 100%; margin-top: 10px; text-align: center">
+    你的努力, 值得被更多人看见, 正如现在努力的你 
+    <!-- <span id="busuanzi_container_site_pv" style='display:none'>
+      <i class="fa fa-eye" aria-hidden="true"></i>
+      <span id="busuanzi_value_site_pv"></span>
+    </span>  -->
+    <!-- <span id="busuanzi_container_site_uv" style='display:none'>
+      <i class="fa fa-user" aria-hidden="true"></i>
+      <span id="busuanzi_value_site_uv"></span>
+    </span> -->
+  </div>
+</footer>
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+<!-- tag cloud 样式引入 -->
+<link
+  rel="stylesheet"
+  href="/css/tags.css"
+/>
+<link
+  rel="stylesheet"
+  href="/css/matery.css"
+/>
+<link
+  rel="stylesheet"
+  href="/css/markdown.css"
+/>
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- busuanzi -->
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a88fecc80aabf2ada5465a20";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+<script type="text/javascript">
+  var typed = new Typed('#home_faith', {
+    strings: ["坚持, 有常, 是成事的第一要素. 日日行, 不怕千万里. 常常做, 不怕千万事."],
+    typeSpeed: 100,
+    cursorChar: '',
+  });
+</script>
+<script type="text/javascript">
+  var typed = new Typed('#faith', {
+    strings: ["坚持, 有常, 是成事的第一要素. 日日行, 不怕千万里. 常常做, 不怕千万事."],
+    typeSpeed: 100,
+    cursorChar: '',
+  });
+</script>
+<script type="text/javascript">
+  var typed = new Typed('#text-slider', {
+    strings: ["你似乎来到了没有知识存在的荒原"],
+    typeSpeed: 100, // 打字速度
+    backSpeed: 50, // 回退速度(多个数组的时候，才生效)
+    cursorChar: '|',
+  });
+</script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>
+<script type="text/javascript">
+  // 切换 背景主题
+  function switchNightMode() {
+    $("html").hasClass("LightMode")
+      ? ($("html").removeClass("LightMode"),
+        localStorage.setItem("themeMode", "dark"),
+        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o"))
+      : ($("html").addClass("LightMode"),
+        localStorage.setItem("themeMode", "white"),
+        $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o"))
+  }
+</script>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', (event) => {
+    (localStorage.getItem('themeMode') === 'dark') 
+      ? (
+        document.querySelector('html').classList.remove('dark'),
+        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o")
+      )
+      :(
+        $("html").addClass("LightMode"),
+        $("#nightMode").removeClass("fa-moon-o").addClass('fa-lightbulb-o')
+      )
+  })
+</script>
+<div onclick="switchNightMode()" id="sma" title="切换主题">
+  <i class="fa fa-moon-o" id="nightMode"  aria-hidden="false"></i>
+</div>

@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="日常开发过程中，会遇到对 React Antd Table 列表的数据进行一键编辑修改的功能，最近刚好做到这个功能，记录一下，方便后续使用参考。 主页面组件 import &amp;#123; useEffect, useState &amp;#125; from &quot;react&quot;; import &amp;#123; Form, Button, Input, message &amp;#125; from &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="表单列表项数据编辑功能">
+<meta property="og:url" content="http://example.com/archives/807/index.html">
+<meta property="og:site_name" content="Alileew&#39;s Blog">
+<meta property="og:description" content="日常开发过程中，会遇到对 React Antd Table 列表的数据进行一键编辑修改的功能，最近刚好做到这个功能，记录一下，方便后续使用参考。 主页面组件 import &amp;#123; useEffect, useState &amp;#125; from &quot;react&quot;; import &amp;#123; Form, Button, Input, message &amp;#125; from &amp;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-11-20T01:42:00.000Z">
+<meta property="article:modified_time" content="2025-04-06T01:25:54.590Z">
+<meta property="article:author" content="alileew">
+<meta property="article:tag" content="React">
+<meta property="article:tag" content="AntD">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>表单列表项数据编辑功能</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+    
+  <!-- highlight plugin css cdn -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/atom-one-dark.min.css"
+    integrity="sha512-Jk4AqjWsdSzSWCSuQTfYRIF84Rq/eV0G2+tu07byYwHcbTGfdmLrHjUSwvzp5HvbiqK4ibmNwdcG49Y5RGYPTg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+	<!-- mathjax -->
+	
+
+  <!-- highlight plugin js cdn -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"
+    integrity="sha512-BNc7saQYlxCL10lykUYhFBcnzdKMnjx5fp5s5wPucDyZ7rKNwCoqJh1GwEAIhuePEK4WM9askJBRsu7ma0Rzvg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Archives</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/alileew">Projects</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/archives/34379/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/archives/807/"
+      ><i class="fab fa-facebook " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/archives/807/&text=表单列表项数据编辑功能"
+      ><i class="fab fa-twitter " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/archives/807/&title=表单列表项数据编辑功能"
+      ><i class="fab fa-linkedin " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/archives/807/&is_video=false&description=表单列表项数据编辑功能"
+      ><i class="fab fa-pinterest " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      href="mailto:?subject=表单列表项数据编辑功能&body=Check out this article: http://example.com/archives/807/"
+      ><i class="fas fa-envelope " aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/archives/807/&title=表单列表项数据编辑功能"
+      ><i
+        class="fab fa-get-pocket "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/archives/807/&title=表单列表项数据编辑功能"
+      ><i class="fab fa-reddit " aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/archives/807/&title=表单列表项数据编辑功能"
+      ><i
+        class="fab fa-stumbleupon "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/archives/807/&title=表单列表项数据编辑功能"
+      ><i class="fab fa-digg " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/archives/807/&name=表单列表项数据编辑功能&description="
+      ><i class="fab fa-tumblr " aria-hidden="true"></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/archives/807/&t=表单列表项数据编辑功能"
+      ><i
+        class="fab fa-hacker-news "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post markdown-article" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        表单列表项数据编辑功能
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">alileew</span>
+      </span>|  -->
+      <!-- <span id="busuanzi_container_page_pv" style='display: none'>
+        <i class="fa fa-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> | 
+      </span> -->
+      
+    <div class="postdate">
+      
+        <time datetime="2023-11-20T01:42:00.000Z" itemprop="datePublished">2023-11-20</time>
+        
+      
+    </div>
+
+
+      <span class="post-count">| 2.2k字</span>
+      <span class="post-count">| 11分钟</span>
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/AntD/" rel="tag">AntD</a>, <a class="tag-link-link" href="/tags/React/" rel="tag">React</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content markdown-content" itemprop="articleBody">
+    <p>日常开发过程中，会遇到对 <code>React Antd Table</code> 列表的数据进行一键编辑修改的功能，最近刚好做到这个功能，记录一下，方便后续使用参考。</p>
+<p><code>主页面组件</code></p>
+<pre><code class="typescript">import &#123; useEffect, useState &#125; from &quot;react&quot;;
+import &#123; Form, Button, Input, message &#125; from &quot;antd&quot;;
+import styles from &quot;./index.less&quot;;
+import ResizeTable from &quot;@/components/ResizeTable&quot;;
+import api from &quot;../../api&quot;;
+
+const ProcessTable = () =&gt; &#123;
+  const [edit, setEdit] = useState(false);
+  const [basicData, setBasicData] = useState([]);
+
+  const [craftOrderData, setCraftOrderData] = useState&lt;any&gt;(&#123;&#125;);
+
+  const [form] = Form.useForm();
+
+  // 查询按钮 进行提交搜索
+  const handleSearchCraftOrderSumbit = (craftOrderId: string) =&gt; &#123;
+    api.searchCraftOrder(craftOrderId).then((res) =&gt; &#123;
+      setCraftOrderData(res.data);
+      setBasicData(res?.data?.detail);
+    &#125;);
+  &#125;;
+
+  const onFinish = () =&gt; &#123;
+    const newdata = form.getFieldsValue().packageProduct;
+    setBasicData(newdata);
+    // 根据需要获取并处理对应的接口入参
+    const &#123; detail, ...extraValue &#125; = craftOrderData;
+    const params = &#123; ...extraValue, detail: newdata &#125;;
+
+    // 编辑列表项内容后，触发【保存】按钮调用接口更新列表数据
+    api.updateCraftOrder(params).then((res) =&gt; &#123;
+      if (res.code !== 200) &#123;
+        message.error(res.message);
+        return;
+      &#125;
+      message.success(&quot;更新成功&quot;);
+      setEdit(false);
+    &#125;);
+  &#125;;
+
+  // 需要的列表栏
+  const columns = [
+    &#123;
+      title: &quot;控温方式&quot;,
+      dataIndex: &quot;temperatureControllerMethod&quot;,
+      name: &quot;temperatureControllerMethod&quot;,
+      key: &quot;temperatureControllerMethod&quot;,
+      align: &quot;center&quot;,
+      renderType: edit ? &quot;input&quot; : &quot;text&quot;,
+    &#125;,
+    &#123;
+      title: &quot;设定温度&quot;,
+      dataIndex: &quot;settingFurnaceTemperature&quot;,
+      name: &quot;settingFurnaceTemperature&quot;,
+      key: &quot;settingFurnaceTemperature&quot;,
+      align: &quot;center&quot;,
+      renderType: edit ? &quot;input&quot; : &quot;text&quot;,
+    &#125;,
+    &#123;
+      title: &quot;设定时间&quot;,
+      dataIndex: &quot;settingDuration&quot;,
+      name: &quot;settingDuration&quot;,
+      key: &quot;settingDuration&quot;,
+      align: &quot;center&quot;,
+      renderType: edit ? &quot;input&quot; : &quot;text&quot;,
+    &#125;,
+    &#123;
+      title: &quot;运行时间&quot;,
+      dataIndex: &quot;runningDuration&quot;,
+      name: &quot;runningDuration&quot;,
+      key: &quot;runningDuration&quot;,
+      align: &quot;center&quot;,
+      renderType: edit ? &quot;input&quot; : &quot;text&quot;,
+    &#125;,
+    &#123;
+      title: &quot;重量&quot;,
+      dataIndex: &quot;weight&quot;,
+      name: &quot;weight&quot;,
+      key: &quot;weight&quot;,
+      align: &quot;center&quot;,
+      renderType: edit ? &quot;input&quot; : &quot;text&quot;,
+    &#125;,
+  ];
+
+  const ListTableForm = (props: any) =&gt; &#123;
+    const &#123; edit, basicData, form &#125; = props;
+    const rules = [&#123; required: true, message: &quot;请填充内容!&quot; &#125;];
+
+    const [cls, setCls] = useState&lt;any[]&gt;([]);
+
+    function renderType(_: any, record: any, index: any, other: any) &#123;
+      const &#123; renderType &#125; = other; //renderType是让编辑态的表格，继承查看态的表格
+      switch (renderType) &#123;
+        case &quot;input&quot;:
+          return (
+            &lt;Form.Item
+              style=&#123;&#123; marginBottom: 0 &#125;&#125;
+              rules=&#123;rules&#125;
+              name=&#123;[record.name, other.name]&#125;
+              fieldKey=&#123;[record.fieldKey, other.name]&#125;
+            &gt;
+              &lt;Input
+                defaultValue=&#123;record.Temperature&#125;
+                size=&#123;&quot;middle&quot;&#125;
+                allowClear
+                disabled=&#123;other.key === &quot;num&quot;&#125;
+              /&gt;
+            &lt;/Form.Item&gt;
+          );
+        case &quot;input-value&quot;:
+          return (
+            &lt;Form.Item
+              style=&#123;&#123; marginBottom: 0 &#125;&#125;
+              rules=&#123;rules&#125;
+              name=&#123;[record.name, other.name]&#125;
+              fieldKey=&#123;[record.fieldKey, other.name]&#125;
+            &gt;
+              &lt;Input defaultValue=&#123;record.value&#125; /&gt;
+            &lt;/Form.Item&gt;
+          );
+        case &quot;input-description&quot;:
+          return (
+            &lt;Form.Item
+              style=&#123;&#123; marginBottom: 0 &#125;&#125;
+              rules=&#123;rules&#125;
+              name=&#123;[record.name, other.name]&#125;
+              fieldKey=&#123;[record.fieldKey, other.name]&#125;
+            &gt;
+              &lt;Input defaultValue=&#123;record.description&#125; /&gt;
+            &lt;/Form.Item&gt;
+          );
+        case &quot;text&quot;:
+          return (
+            &lt;Form.Item
+              style=&#123;&#123; marginBottom: 0 &#125;&#125;
+              rules=&#123;rules&#125;
+              name=&#123;[record.name, other.name]&#125;
+              fieldKey=&#123;[record.fieldKey, other.name]&#125;
+            &gt;
+              &lt;span&gt;&#123;record.name&#125;&lt;/span&gt;
+            &lt;/Form.Item&gt;
+          );
+        case &quot;text-value&quot;:
+          return (
+            &lt;Form.Item
+              style=&#123;&#123; marginBottom: 0 &#125;&#125;
+              rules=&#123;rules&#125;
+              name=&#123;[record.name, other.name]&#125;
+              fieldKey=&#123;[record.fieldKey, other.name]&#125;
+            &gt;
+              &lt;span&gt;&#123;record.value&#125;&lt;/span&gt;
+            &lt;/Form.Item&gt;
+          );
+        case &quot;text-description&quot;:
+          return (
+            &lt;Form.Item
+              style=&#123;&#123; marginBottom: 0 &#125;&#125;
+              rules=&#123;rules&#125;
+              name=&#123;[record.name, other.name]&#125;
+              fieldKey=&#123;[record.fieldKey, other.name]&#125;
+            &gt;
+              &lt;span&gt;&#123;record.description&#125;&lt;/span&gt;
+            &lt;/Form.Item&gt;
+          );
+        default:
+          return (
+            &lt;Form.Item shouldUpdate=&#123;true&#125; style=&#123;&#123; marginBottom: 0 &#125;&#125;&gt;
+              &#123;(&#123; getFieldValue &#125;) =&gt; &#123;
+                return (getFieldValue(props.formName) || [])?.[index]?.[
+                  other?.name
+                ];
+              &#125;&#125;
+            &lt;/Form.Item&gt;
+          );
+      &#125;
+    &#125;
+
+    useEffect(() =&gt; &#123;
+      const _newProps = props.cls.map(
+        (item: &#123; [x: string]: any; render: any &#125;) =&gt; &#123;
+          const &#123; render, ...resetProps &#125; = item;
+          return &#123;
+            ...resetProps,
+            render: (text: any, record: any, index: any) =&gt;
+              renderType(text, record, index, item),
+          &#125;;
+        &#125;
+      );
+      setCls(_newProps);
+    &#125;, [props.cls]);
+
+    return (
+      &lt;&gt;
+        &#123;edit ? (
+          // 编辑态模式下，搭配 Form.List 内嵌Form表单就可以通过form拿到所有列表项修改的值
+          &lt;Form.List name=&#123;props.formName || &quot;tableForm&quot;&#125;&gt;
+            &#123;(fields) =&gt; &#123;
+              return (
+                &lt;&gt;
+                  &lt;Form.Item style=&#123;&#123; marginBottom: 0 &#125;&#125;&gt;
+                    &lt;ResizeTable
+                      rowClassName=&#123;() =&gt; styles.childtable&#125;
+                      tableHeadheight=&#123;90&#125;
+                      idName=&quot;tables&quot; //必传，用来获取表格高度做数据滚动检测
+                      title=&#123;() =&gt; &quot;表单设置&quot;&#125;
+                      footer=&#123;() =&gt; &#123;
+                        return (
+                          &lt;div className=&#123;styles.footers&#125;&gt;
+                            &lt;Button
+                              onClick=&#123;() =&gt; &#123;
+                                setEdit(false);
+                              &#125;&#125;
+                            &gt;
+                              取消
+                            &lt;/Button&gt;
+                            &lt;Button
+                              type=&quot;primary&quot;
+                              className=&#123;styles.primary&#125;
+                              onClick=&#123;onFinish&#125;
+                            &gt;
+                              保存
+                            &lt;/Button&gt;
+                          &lt;/div&gt;
+                        );
+                      &#125;&#125;
+                      pagination=&#123;false&#125;
+                      rowKey=&#123;&quot;name&quot;&#125;
+                      dataSource=&#123;fields&#125;
+                      columns=&#123;cls&#125;
+                    /&gt;
+                  &lt;/Form.Item&gt;
+                &lt;/&gt;
+              );
+            &#125;&#125;
+          &lt;/Form.List&gt;
+        ) : (
+          &lt;Form.Item style=&#123;&#123; marginBottom: 0 &#125;&#125;&gt;
+            &lt;ResizeTable
+              rowClassName=&#123;() =&gt; styles.childtable&#125;
+              tableHeadheight=&#123;90&#125;
+              idName=&quot;table&quot;
+              title=&#123;() =&gt; &quot;表单设置&quot;&#125;
+              footer=&#123;() =&gt; &#123;
+                return (
+                  &lt;Button
+                    onClick=&#123;() =&gt; &#123;
+                      setEdit(true);
+                      form.setFieldsValue(&#123; packageProduct: basicData &#125;);
+                    &#125;&#125;
+                  &gt;
+                    编辑
+                  &lt;/Button&gt;
+                );
+              &#125;&#125;
+              pagination=&#123;false&#125;
+              rowKey=&#123;&quot;name&quot;&#125;
+              dataSource=&#123;basicData&#125;
+              columns=&#123;columns&#125;
+            /&gt;
+          &lt;/Form.Item&gt;
+        )&#125;
+      &lt;/&gt;
+    );
+  &#125;;
+
+  useEffect(() =&gt; &#123;
+    // 根据参数，查询table列表数据
+    handleSearchCraftOrderSumbit(&quot;123&quot;);
+  &#125;, []);
+
+  return (
+    &lt;div className=&#123;styles.root&#125;&gt;
+      &lt;Form form=&#123;form&#125; name=&quot;basic&quot; className=&#123;styles.main&#125;&gt;
+        &lt;ListTableForm
+          hideAction=&#123;!edit&#125;
+          edit=&#123;edit&#125;
+          formName=&quot;packageProduct&quot;
+          fields=&#123;basicData&#125;
+          basicData=&#123;basicData&#125;
+          cls=&#123;columns&#125;
+          form=&#123;form&#125;
+        /&gt;
+      &lt;/Form&gt;
+    &lt;/div&gt;
+  );
+&#125;;
+
+export default ProcessTable;
+</code></pre>
+<p>无非就是编辑态模式下，通过Form.List内嵌Form.Item表单项的方式在form中拿到所有列表修改项的值。这里页面用到了额外封装的ResizeTable组件，其实就是对Antd的Table做了层封装 使其支持resize动态平铺以及高度自控制的滚动。</p>
+<hr>
+<p><code>ResizeTable组件</code></p>
+<pre><code class="typescript">import React from &quot;react&quot;;
+import Table from &quot;@/components/Table&quot;;
+import &#123; useGetResizeHeight &#125; from &quot;./hook/useGetResizeTable&quot;;
+import styles from &quot;./index.less&quot;;
+
+/*** 自适应高度表格*
+ * @功能*
+ * 1、自动占满页面剩余高度*
+ * 2、改变浏览器窗口时自动适应剩余高度不出现外部滚动条*
+ * @前提*
+ *  页面自身设置的有高度，而非根据子元素撑开高度*
+ * @使用方法*
+ * 1、安装lodash--yarn add lodash，仅使用里面的防抖方法*
+ * 2、在需要使用的地方导入--import ResizeTable from &#39;@/components/ResizeTable/ResizeTable&#39;*
+ * 3、使用--&lt;ResizeTable api和antd的Table一样/&gt;* @demo* import ResizeTable from &#39;@/components/ResizeTable/ResizeTable&#39;;*
+ * 4、tableHeadheight（表头高度）paginationHeight（分页组件高度可选） middleHeight（底部预留高度可选）
+ **/
+const ResizeTable: React.FC&lt;any&gt; = (props) =&gt; &#123;
+  //表头高度&lt;tableHeadheight&gt; 分页组件高度(paginationHeight) 底部预留高度(middleHeight)
+  const &#123; tableHeadheight, paginationHeight, middleHeight, idName &#125; = props;
+  const [tableHeight] = useGetResizeHeight(
+    `$&#123;idName&#125;`,
+    tableHeadheight,
+    paginationHeight ? paginationHeight : 0,
+    middleHeight ? middleHeight : 0
+  );
+  let tableProps = &#123; ...props, scroll: &#123; y: tableHeight &#125; &#125;;
+  if (props &amp;&amp; props.scroll &amp;&amp; props.scroll.x) &#123;
+    tableProps.scroll.x = props.scroll.x;
+  &#125;
+  return (
+    &lt;div className=&#123;styles.tableWrap&#125;&gt;
+      &lt;div id=&#123;idName&#125; className=&#123;styles.table&#125;&gt;
+        &lt;Table &#123;...tableProps&#125; /&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+&#125;;
+export default ResizeTable;
+</code></pre>
+<hr>
+<p><code>useGetResizeHeight动态缩放组件</code></p>
+<pre><code class="typescript">import &#123; useEffect, useState &#125; from &quot;react&quot;;
+import debounce from &quot;lodash/debounce&quot;;
+import &#123; useSize &#125; from &quot;ahooks&quot;;
+export function useGetResizeHeight(
+  name: string,
+  tableHeadheight: number,
+  paginationHeight: number,
+  middleHeight: number
+) &#123;
+  //设置撑高表格外部包裹元素的高度
+  const [tableHeight, setTableHeight] = useState(500);
+  const size = useSize(document.getElementById(name));
+  const handleGetTableHeight = () =&gt; &#123;
+    setTimeout(() =&gt; &#123;
+      let height = document.getElementById(name)!.clientHeight;
+      //高度-表头高度&lt;tableHeadheight&gt;-分页组件高度(paginationHeight)-底部预留高度(middleHeight)
+      height = height - tableHeadheight - paginationHeight - middleHeight - 6;
+      setTableHeight(height);
+    &#125;);
+  &#125;;
+  useEffect(() =&gt; &#123;
+    handleGetTableHeight();
+    const debounced = debounce(handleGetTableHeight, 200);
+    window.addEventListener(&quot;resize&quot;, debounced);
+    return () =&gt; window.removeEventListener(&quot;resize&quot;, debounced);
+  &#125;, [size]);
+
+  return [tableHeight];
+&#125;
+</code></pre>
+<p><code>Tips: </code>这里有个小点要注意下，因为这里的table表头只有一层，使用这种方式是完全没问题的。但如果是合并表头的header，columns中内嵌了children后，使用这个<code>ListTableForm</code>编辑的时候就会导致columns只能显示第一层的部分，导致表头header丢失了。<br>这个时候可以使用geek的方式进行处理</p>
+<p><code>多表头合并态下，如何编辑的时候固定表格头不变，以下是部分实例代码 参考</code></p>
+<pre><code class="typescript">  &#123;
+    edit ? (
+      // 编辑态
+      &lt;Form.List name=&#123;props.formName || &quot;tableForm&quot;&#125;&gt;
+        &#123;(fields) =&gt; &#123;
+          return (
+            &lt;&gt;
+              &lt;Form.Item style=&#123;&#123; marginBottom: 0 &#125;&#125;&gt;
+                &#123;/* 只展示固定表头做占位用 不展示数据 同时根据style清除原有的table-body样式 */&#125;
+                &lt;Table
+                  className=&#123;`$&#123;styles.emptyTableBody&#125;`&#125;
+                  pagination=&#123;false&#125;
+                  dataSource=&#123;[]&#125;
+                  columns=&#123;colums as any&#125;
+                /&gt;
+
+                &#123;/* 固定上面的表头后，把现在的表头通过样式藏掉，因为表单的数据需要通过column里的name做绑定 */&#125;
+                &lt;Table
+                  className=&#123;`$&#123;styles.emptyTableColumn&#125;`&#125;
+                  pagination=&#123;false&#125;
+                  rowKey=&#123;&quot;name&quot;&#125;
+                  footer=&#123;() =&gt; &#123;
+                    return (
+                      &lt;div className=&#123;styles.footers&#125;&gt;
+                        &lt;Button
+                          onClick=&#123;() =&gt; &#123;
+                            setEdit(false);
+                          &#125;&#125;
+                          style=&#123;&#123; marginRight: 15 &#125;&#125;
+                        &gt;
+                          取消
+                        &lt;/Button&gt;
+                        &lt;Button
+                          type=&quot;primary&quot;
+                          className=&#123;styles.primary&#125;
+                          onClick=&#123;onFinish&#125;
+                        &gt;
+                          保存
+                        &lt;/Button&gt;
+                      &lt;/div&gt;
+                    );
+                  &#125;&#125;
+                  dataSource=&#123;fields&#125;
+                  columns=&#123;cls&#125;
+                /&gt;
+              &lt;/Form.Item&gt;
+            &lt;/&gt;
+          );
+        &#125;&#125;
+      &lt;/Form.List&gt;
+    ) : (
+      // 仅展示
+      &lt;Form.Item style=&#123;&#123; marginBottom: 0 &#125;&#125;&gt;
+        &lt;Table /&gt;
+      &lt;/Form.Item&gt;
+    )
+  &#125;
+
+  // 上面对应的Table隐藏表头head和表格body列表内容的样式
+  .emptyTableBody &#123;
+    :global(.ant-table-tbody) &#123;
+      display: none;
+    &#125;
+  &#125;
+  .emptyTableColumn &#123;
+    :global(.ant-table-thead) &#123;
+      display: none;
+    &#125;
+  &#125;
+</code></pre>
+
+  </div>
+</article>
+ 
+<!-- 下面添加 Gitalk 部分 -->
+
+
+<!-- valine Comments -->
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<!-- <script src="https://cdn.fayne.cn/js/Valine.min.js"></script> -->
+<div id="vcomments" style="margin-top: 30px"></div>
+<script type="text/javascript">
+  new Valine({
+    el: "#vcomments",
+    appId: "5Ah2dYXOOS7ryWdhr9z0BP9h-gzGzoHsz",
+    appKey: "JxuAq1gr9Q2b54FVIAj0bIcp",
+    avatar: "retro",
+    placeholder: "说点什么？证明你来过 ~",
+    pageSize: 10,
+  });
+</script>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/alileew">Projects</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/archives/807/"
+      ><i class="fab fa-facebook fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/archives/807/&text=表单列表项数据编辑功能"
+      ><i class="fab fa-twitter fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/archives/807/&title=表单列表项数据编辑功能"
+      ><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/archives/807/&is_video=false&description=表单列表项数据编辑功能"
+      ><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      href="mailto:?subject=表单列表项数据编辑功能&body=Check out this article: http://example.com/archives/807/"
+      ><i class="fas fa-envelope fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/archives/807/&title=表单列表项数据编辑功能"
+      ><i
+        class="fab fa-get-pocket fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/archives/807/&title=表单列表项数据编辑功能"
+      ><i class="fab fa-reddit fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/archives/807/&title=表单列表项数据编辑功能"
+      ><i
+        class="fab fa-stumbleupon fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/archives/807/&title=表单列表项数据编辑功能"
+      ><i class="fab fa-digg fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/archives/807/&name=表单列表项数据编辑功能&description="
+      ><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/archives/807/&t=表单列表项数据编辑功能"
+      ><i
+        class="fab fa-hacker-news fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;   2021-2025
+    alileew
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       -->
+        <li>
+          <a href="/"
+            >Home</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/archives/"
+            >Archives</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a target="_blank" rel="noopener" href="https://github.com/alileew"
+            >Projects</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/tags/"
+            >Tags</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/about/"
+            >About</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/search/"
+            >Search</a
+          >
+        </li>
+        <!--
+     -->
+      </ul>
+    </nav>
+  </div>
+  <div style="width: 100%; margin-top: 10px; text-align: center">
+    你的努力, 值得被更多人看见, 正如现在努力的你 
+    <!-- <span id="busuanzi_container_site_pv" style='display:none'>
+      <i class="fa fa-eye" aria-hidden="true"></i>
+      <span id="busuanzi_value_site_pv"></span>
+    </span>  -->
+    <!-- <span id="busuanzi_container_site_uv" style='display:none'>
+      <i class="fa fa-user" aria-hidden="true"></i>
+      <span id="busuanzi_value_site_uv"></span>
+    </span> -->
+  </div>
+</footer>
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+<!-- tag cloud 样式引入 -->
+<link
+  rel="stylesheet"
+  href="/css/tags.css"
+/>
+<link
+  rel="stylesheet"
+  href="/css/matery.css"
+/>
+<link
+  rel="stylesheet"
+  href="/css/markdown.css"
+/>
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- busuanzi -->
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a88fecc80aabf2ada5465a20";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+<script type="text/javascript">
+  var typed = new Typed('#home_faith', {
+    strings: ["坚持, 有常, 是成事的第一要素. 日日行, 不怕千万里. 常常做, 不怕千万事."],
+    typeSpeed: 100,
+    cursorChar: '',
+  });
+</script>
+<script type="text/javascript">
+  var typed = new Typed('#faith', {
+    strings: ["坚持, 有常, 是成事的第一要素. 日日行, 不怕千万里. 常常做, 不怕千万事."],
+    typeSpeed: 100,
+    cursorChar: '',
+  });
+</script>
+<script type="text/javascript">
+  var typed = new Typed('#text-slider', {
+    strings: ["你似乎来到了没有知识存在的荒原"],
+    typeSpeed: 100, // 打字速度
+    backSpeed: 50, // 回退速度(多个数组的时候，才生效)
+    cursorChar: '|',
+  });
+</script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>
+<script type="text/javascript">
+  // 切换 背景主题
+  function switchNightMode() {
+    $("html").hasClass("LightMode")
+      ? ($("html").removeClass("LightMode"),
+        localStorage.setItem("themeMode", "dark"),
+        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o"))
+      : ($("html").addClass("LightMode"),
+        localStorage.setItem("themeMode", "white"),
+        $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o"))
+  }
+</script>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', (event) => {
+    (localStorage.getItem('themeMode') === 'dark') 
+      ? (
+        document.querySelector('html').classList.remove('dark'),
+        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o")
+      )
+      :(
+        $("html").addClass("LightMode"),
+        $("#nightMode").removeClass("fa-moon-o").addClass('fa-lightbulb-o')
+      )
+  })
+</script>
+<div onclick="switchNightMode()" id="sma" title="切换主题">
+  <i class="fa fa-moon-o" id="nightMode"  aria-hidden="false"></i>
+</div>

@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="搭建博客史说起自己的博客搭建史，也是一波三折，记得从大学毕业到现在，各种博客都折腾过一遍。 刚开始的时候是上大学的时候用wordPress模板搭建的博客，后来因为产出量不多，服务器和域名老是忘记续费，慢慢的就停了。 后来觉得平台上「掘金、简书、知乎等」直接写文章也挺好，受众多，也不用去折腾服务器、也不用担心是否会忘记续费。按照这种方式倒是坚持了一段时间，后来因为工（hai）作（shi）太（tai）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你为什么无法坚持写博客">
+<meta property="og:url" content="http://example.com/archives/20132/index.html">
+<meta property="og:site_name" content="Alileew&#39;s Blog">
+<meta property="og:description" content="搭建博客史说起自己的博客搭建史，也是一波三折，记得从大学毕业到现在，各种博客都折腾过一遍。 刚开始的时候是上大学的时候用wordPress模板搭建的博客，后来因为产出量不多，服务器和域名老是忘记续费，慢慢的就停了。 后来觉得平台上「掘金、简书、知乎等」直接写文章也挺好，受众多，也不用去折腾服务器、也不用担心是否会忘记续费。按照这种方式倒是坚持了一段时间，后来因为工（hai）作（shi）太（tai）">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211205175150.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211205175755.png">
+<meta property="article:published_time" content="2021-12-04T02:44:01.000Z">
+<meta property="article:modified_time" content="2025-04-06T02:13:00.153Z">
+<meta property="article:author" content="alileew">
+<meta property="article:tag" content="blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211205175150.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>你为什么无法坚持写博客</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+    
+  <!-- highlight plugin css cdn -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/atom-one-dark.min.css"
+    integrity="sha512-Jk4AqjWsdSzSWCSuQTfYRIF84Rq/eV0G2+tu07byYwHcbTGfdmLrHjUSwvzp5HvbiqK4ibmNwdcG49Y5RGYPTg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+	<!-- mathjax -->
+	
+
+  <!-- highlight plugin js cdn -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"
+    integrity="sha512-BNc7saQYlxCL10lykUYhFBcnzdKMnjx5fp5s5wPucDyZ7rKNwCoqJh1GwEAIhuePEK4WM9askJBRsu7ma0Rzvg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Archives</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/alileew">Projects</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/archives/53560/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/archives/58499/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/archives/20132/"
+      ><i class="fab fa-facebook " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/archives/20132/&text=你为什么无法坚持写博客"
+      ><i class="fab fa-twitter " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/archives/20132/&title=你为什么无法坚持写博客"
+      ><i class="fab fa-linkedin " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/archives/20132/&is_video=false&description=你为什么无法坚持写博客"
+      ><i class="fab fa-pinterest " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      href="mailto:?subject=你为什么无法坚持写博客&body=Check out this article: http://example.com/archives/20132/"
+      ><i class="fas fa-envelope " aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/archives/20132/&title=你为什么无法坚持写博客"
+      ><i
+        class="fab fa-get-pocket "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/archives/20132/&title=你为什么无法坚持写博客"
+      ><i class="fab fa-reddit " aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/archives/20132/&title=你为什么无法坚持写博客"
+      ><i
+        class="fab fa-stumbleupon "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/archives/20132/&title=你为什么无法坚持写博客"
+      ><i class="fab fa-digg " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/archives/20132/&name=你为什么无法坚持写博客&description="
+      ><i class="fab fa-tumblr " aria-hidden="true"></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/archives/20132/&t=你为什么无法坚持写博客"
+      ><i
+        class="fab fa-hacker-news "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E5%8F%B2"><span class="toc-number">1.</span> <span class="toc-text">搭建博客史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2"><span class="toc-number">2.</span> <span class="toc-text">为什么要搭建博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%B6%E4%BC%B8%E9%93%BE%E6%8E%A5"><span class="toc-number">3.</span> <span class="toc-text">延伸链接</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post markdown-article" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        你为什么无法坚持写博客
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">alileew</span>
+      </span>|  -->
+      <!-- <span id="busuanzi_container_page_pv" style='display: none'>
+        <i class="fa fa-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> | 
+      </span> -->
+      
+    <div class="postdate">
+      
+        <time datetime="2021-12-04T02:44:01.000Z" itemprop="datePublished">2021-12-04</time>
+        
+      
+    </div>
+
+
+      <span class="post-count">| 1.4k字</span>
+      <span class="post-count">| 4分钟</span>
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/blog/" rel="tag">blog</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content markdown-content" itemprop="articleBody">
+    <h2 id="搭建博客史"><a href="#搭建博客史" class="headerlink" title="搭建博客史"></a>搭建博客史</h2><p>说起自己的博客搭建史，也是一波三折，记得从大学毕业到现在，各种博客都折腾过一遍。</p>
+<p>刚开始的时候是上大学的时候用wordPress模板搭建的博客，后来因为产出量不多，服务器和域名老是忘记续费，慢慢的就停了。</p>
+<p>后来觉得平台上「掘金、简书、知乎等」直接写文章也挺好，受众多，也不用去折腾服务器、也不用担心是否会忘记续费。按照这种方式倒是坚持了一段时间，后来因为工（hai）作（shi）太（tai）忙（lan），写的文章发布到平台上的也就越来越少。</p>
+<p>再后来，又觉得直接在 <code>GitHub</code> 的 <code>issue</code> 上写也是一种不错的方式，慢慢的就把自己的一些文章放到了 GitHub issue 上，后来也是不了了之。</p>
+<p>最近两年，用惯了 <code>Notion「一款线上笔记软件」</code> 自己日常生活思考以及一些沉淀都放到了 Notion 上来管理，我截取了 Notion 笔记中部分片段，如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211205175150.png"></p>
+<figcaption>Notion笔记-20211205175150.png</figcaption>
+
+<p>以及如何用 Notion 搭建自己的学习/复习计划。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/20211205175755.png"></p>
+<figcaption>study-plan-20211205175755.png</figcaption>
+
+<p>按照这种学习模式在 Notion 坚持记录了差不多2年「2020-2021」，按照每周做的事情，每月做的事情，每月定时复盘记录，所思所想，技术思考及沉淀 等等，都有罗列对应的目录进行记录跟进，觉得收获还是蛮大的。</p>
+<h2 id="为什么要搭建博客"><a href="#为什么要搭建博客" class="headerlink" title="为什么要搭建博客"></a>为什么要搭建博客</h2><p>那么问题来了, 既然Notion云笔记这种记录方式挺好, 为什么还要搭建一个博客呢？</p>
+<p>我想最主要的原因：</p>
+<p class="article-highlight">我想把我的思考以及文章分享给更多的人，💡思想的传递及碰撞💥，远比 "闭门造车" 更让人清醒。优秀的人很多，要学会接受并学习他人的优秀，也要正视自己的无知，未经省察的人生没有意义 ！</p>
+
+<p>所以，2021年10月份搭建了这个博客, 以此记录生活、工作中的思考，技术的总结沉淀 等等。 之后将通过 <code>Notion + alileew&#39;s blog</code> 的方式记录，Notion alileew’s blog 对外。</p>
+<p>现在使用的是vercel部署的，是因为，Github自成体系，图床、评论、主页 都可以做，然后使用 vercel 部署，其自带https证书服务，一键发布。至于以后会不会迁移博客「无非就是折腾下搬到国内服务商」，那就是之后要做的事情了，先做好当下应该做的事，种一棵树最好的时间是十年前，其次是现在 ~ </p>
+<p>后将 github pages 部署方式 升级至 <a target="_blank" rel="noopener" href="https://vercel.com/">vercel</a> 进行发布部署，其自带https证书服务，一键发布。唯一的缺点就是国内访问的话有时候不太稳定。</p>
+<p>回到此篇文章的主题 <code>你为什么无法坚持写博客</code>, 我们得先弄清楚为什么要写博客。</p>
+<p>我听过很多人想建博客的理由是想把博客当成笔记本，记录自己学到的东西、遇到的问题和解决方法，当然这也是我前些年犯的一个问题。这是一个让博客最终走向荒废的理由，因为你在笔记本就可以做到类似的事，除非你记录的问题有你自己独到的思考，否则网友们更愿意去看 StackOverflow、掘金.</p>
+<p>写博客的第一个意义是让陌生人通过博客了解到你是什么人、你在想什么、你做了什么。不妨试想一下，如果你正准备找工作，一位素不相识的 HR 如果要了解你，光是一份简历就能让 HR 知道你的价值吗？如果你有一个精彩的博客，HR 也许能通过你的博客了解你对技术的属于自己的思考、你在业余时间在想的事情是什么、你对待生活的态度是什么，这比简历本身更像一份立体的简历。</p>
+<p>所以，在写博客的时候，你可以专注于：</p>
+<ul>
+<li>你对某个技术的看法以及思考和沉淀</li>
+<li>你对某本书的书评，这本书给你带来了哪些巨大的思考</li>
+<li>你职业之外的一些生活感悟和记录</li>
+</ul>
+<p class="article-highlight">如果你本身就不是一个爱表达的人，试图通过建立博客去培养表达欲不是一个行之有效的方法，那会更难。这就像很多本身不喜欢读书的人试图通过 Kindle 培养自己的读书习惯，大多数都是失败收场。你应该是因为喜欢读书所以买 Kindle, 正如你应该是想表达你的东西所以你写博客。</p>
+
+<p>你大可不必在乎你写的文章一定要有 10W+ 的阅读量，这脱离了你写文章 记录成长的本质。你只要在乎你写的文章是经过了你的深层次思考，而阅读了你文章的陌生人，能从你的字里行间感受到你是一个对生活充满热情，对技术充满敬畏之心的人，我想这就足够了 ~ </p>
+<p>正如 <a target="_blank" rel="noopener" href="https://lutaonan.com/">Randy’s Blog</a> 中说的那样：<code>记住，一个博客的死掉不是不再更新，而是无法访问. </code> </p>
+<h2 id="延伸链接"><a href="#延伸链接" class="headerlink" title="延伸链接"></a>延伸链接</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/alileew/mywiki">前端开发相关的优秀网站、博客</a></li>
+</ul>
+
+  </div>
+</article>
+ 
+<!-- 下面添加 Gitalk 部分 -->
+
+
+<!-- valine Comments -->
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<!-- <script src="https://cdn.fayne.cn/js/Valine.min.js"></script> -->
+<div id="vcomments" style="margin-top: 30px"></div>
+<script type="text/javascript">
+  new Valine({
+    el: "#vcomments",
+    appId: "5Ah2dYXOOS7ryWdhr9z0BP9h-gzGzoHsz",
+    appKey: "JxuAq1gr9Q2b54FVIAj0bIcp",
+    avatar: "retro",
+    placeholder: "说点什么？证明你来过 ~",
+    pageSize: 10,
+  });
+</script>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/alileew">Projects</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E5%8F%B2"><span class="toc-number">1.</span> <span class="toc-text">搭建博客史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2"><span class="toc-number">2.</span> <span class="toc-text">为什么要搭建博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%B6%E4%BC%B8%E9%93%BE%E6%8E%A5"><span class="toc-number">3.</span> <span class="toc-text">延伸链接</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/archives/20132/"
+      ><i class="fab fa-facebook fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/archives/20132/&text=你为什么无法坚持写博客"
+      ><i class="fab fa-twitter fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/archives/20132/&title=你为什么无法坚持写博客"
+      ><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/archives/20132/&is_video=false&description=你为什么无法坚持写博客"
+      ><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      href="mailto:?subject=你为什么无法坚持写博客&body=Check out this article: http://example.com/archives/20132/"
+      ><i class="fas fa-envelope fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/archives/20132/&title=你为什么无法坚持写博客"
+      ><i
+        class="fab fa-get-pocket fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/archives/20132/&title=你为什么无法坚持写博客"
+      ><i class="fab fa-reddit fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/archives/20132/&title=你为什么无法坚持写博客"
+      ><i
+        class="fab fa-stumbleupon fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/archives/20132/&title=你为什么无法坚持写博客"
+      ><i class="fab fa-digg fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/archives/20132/&name=你为什么无法坚持写博客&description="
+      ><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/archives/20132/&t=你为什么无法坚持写博客"
+      ><i
+        class="fab fa-hacker-news fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;   2021-2025
+    alileew
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       -->
+        <li>
+          <a href="/"
+            >Home</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/archives/"
+            >Archives</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a target="_blank" rel="noopener" href="https://github.com/alileew"
+            >Projects</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/tags/"
+            >Tags</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/about/"
+            >About</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/search/"
+            >Search</a
+          >
+        </li>
+        <!--
+     -->
+      </ul>
+    </nav>
+  </div>
+  <div style="width: 100%; margin-top: 10px; text-align: center">
+    你的努力, 值得被更多人看见, 正如现在努力的你 
+    <!-- <span id="busuanzi_container_site_pv" style='display:none'>
+      <i class="fa fa-eye" aria-hidden="true"></i>
+      <span id="busuanzi_value_site_pv"></span>
+    </span>  -->
+    <!-- <span id="busuanzi_container_site_uv" style='display:none'>
+      <i class="fa fa-user" aria-hidden="true"></i>
+      <span id="busuanzi_value_site_uv"></span>
+    </span> -->
+  </div>
+</footer>
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+<!-- tag cloud 样式引入 -->
+<link
+  rel="stylesheet"
+  href="/css/tags.css"
+/>
+<link
+  rel="stylesheet"
+  href="/css/matery.css"
+/>
+<link
+  rel="stylesheet"
+  href="/css/markdown.css"
+/>
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- busuanzi -->
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a88fecc80aabf2ada5465a20";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+<script type="text/javascript">
+  var typed = new Typed('#home_faith', {
+    strings: ["坚持, 有常, 是成事的第一要素. 日日行, 不怕千万里. 常常做, 不怕千万事."],
+    typeSpeed: 100,
+    cursorChar: '',
+  });
+</script>
+<script type="text/javascript">
+  var typed = new Typed('#faith', {
+    strings: ["坚持, 有常, 是成事的第一要素. 日日行, 不怕千万里. 常常做, 不怕千万事."],
+    typeSpeed: 100,
+    cursorChar: '',
+  });
+</script>
+<script type="text/javascript">
+  var typed = new Typed('#text-slider', {
+    strings: ["你似乎来到了没有知识存在的荒原"],
+    typeSpeed: 100, // 打字速度
+    backSpeed: 50, // 回退速度(多个数组的时候，才生效)
+    cursorChar: '|',
+  });
+</script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>
+<script type="text/javascript">
+  // 切换 背景主题
+  function switchNightMode() {
+    $("html").hasClass("LightMode")
+      ? ($("html").removeClass("LightMode"),
+        localStorage.setItem("themeMode", "dark"),
+        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o"))
+      : ($("html").addClass("LightMode"),
+        localStorage.setItem("themeMode", "white"),
+        $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o"))
+  }
+</script>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', (event) => {
+    (localStorage.getItem('themeMode') === 'dark') 
+      ? (
+        document.querySelector('html').classList.remove('dark'),
+        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o")
+      )
+      :(
+        $("html").addClass("LightMode"),
+        $("#nightMode").removeClass("fa-moon-o").addClass('fa-lightbulb-o')
+      )
+  })
+</script>
+<div onclick="switchNightMode()" id="sma" title="切换主题">
+  <i class="fa fa-moon-o" id="nightMode"  aria-hidden="false"></i>
+</div>

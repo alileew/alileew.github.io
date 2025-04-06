@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="为什么会有浏览器缓存策略 减少重复数据请求，避免通过网络再次加载资源，节省流量。 降低服务器的压力，提升网站性能。 加快客户端加载网页的速度， 提升用户体验。  何谓 【强缓存 vs 协商缓存】强缓存:若浏览器有缓存副本且未过期，则直接使用强缓存版本 cache-control: max-age 协商缓存:即使本地有副本，也会携带缓存标识 If-modified-since&#x2F;If-none-mat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聊聊浏览器的缓存策略">
+<meta property="og:url" content="http://example.com/archives/60150/index.html">
+<meta property="og:site_name" content="Alileew&#39;s Blog">
+<meta property="og:description" content="为什么会有浏览器缓存策略 减少重复数据请求，避免通过网络再次加载资源，节省流量。 降低服务器的压力，提升网站性能。 加快客户端加载网页的速度， 提升用户体验。  何谓 【强缓存 vs 协商缓存】强缓存:若浏览器有缓存副本且未过期，则直接使用强缓存版本 cache-control: max-age 协商缓存:即使本地有副本，也会携带缓存标识 If-modified-since&#x2F;If-none-mat">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/202204051756683.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/202204051946208.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/202204051953938.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/202204052008883.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/202204052020316.png">
+<meta property="article:published_time" content="2022-03-27T03:08:31.000Z">
+<meta property="article:modified_time" content="2022-05-19T01:43:08.000Z">
+<meta property="article:author" content="alileew">
+<meta property="article:tag" content="浏览器缓存">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/202204051756683.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>聊聊浏览器的缓存策略</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+    
+  <!-- highlight plugin css cdn -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/atom-one-dark.min.css"
+    integrity="sha512-Jk4AqjWsdSzSWCSuQTfYRIF84Rq/eV0G2+tu07byYwHcbTGfdmLrHjUSwvzp5HvbiqK4ibmNwdcG49Y5RGYPTg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+	<!-- mathjax -->
+	
+
+  <!-- highlight plugin js cdn -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"
+    integrity="sha512-BNc7saQYlxCL10lykUYhFBcnzdKMnjx5fp5s5wPucDyZ7rKNwCoqJh1GwEAIhuePEK4WM9askJBRsu7ma0Rzvg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Archives</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/alileew">Projects</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/archives/22388/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/archives/60809/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/archives/60150/"
+      ><i class="fab fa-facebook " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/archives/60150/&text=聊聊浏览器的缓存策略"
+      ><i class="fab fa-twitter " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/archives/60150/&title=聊聊浏览器的缓存策略"
+      ><i class="fab fa-linkedin " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/archives/60150/&is_video=false&description=聊聊浏览器的缓存策略"
+      ><i class="fab fa-pinterest " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      href="mailto:?subject=聊聊浏览器的缓存策略&body=Check out this article: http://example.com/archives/60150/"
+      ><i class="fas fa-envelope " aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/archives/60150/&title=聊聊浏览器的缓存策略"
+      ><i
+        class="fab fa-get-pocket "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/archives/60150/&title=聊聊浏览器的缓存策略"
+      ><i class="fab fa-reddit " aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/archives/60150/&title=聊聊浏览器的缓存策略"
+      ><i
+        class="fab fa-stumbleupon "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/archives/60150/&title=聊聊浏览器的缓存策略"
+      ><i class="fab fa-digg " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/archives/60150/&name=聊聊浏览器的缓存策略&description="
+      ><i class="fab fa-tumblr " aria-hidden="true"></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/archives/60150/&t=聊聊浏览器的缓存策略"
+      ><i
+        class="fab fa-hacker-news "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%9C%89%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5"><span class="toc-number">1.</span> <span class="toc-text">为什么会有浏览器缓存策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%95%E8%B0%93-%E3%80%90%E5%BC%BA%E7%BC%93%E5%AD%98-vs-%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98%E3%80%91"><span class="toc-number">2.</span> <span class="toc-text">何谓 【强缓存 vs 协商缓存】</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E5%A6%82%E4%BD%95%E5%91%BD%E4%B8%AD-%E5%BC%BA%E7%BC%93%E5%AD%98%E5%92%8C%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">页面如何命中 强缓存和协商缓存？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E5%9D%80%E9%93%BE%E6%8E%A5%E5%AE%9E%E4%BE%8B%E8%AE%B2%E8%A7%A3"><span class="toc-number">4.</span> <span class="toc-text">网址链接实例讲解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Last-Modified-Etag%E5%8C%BA%E5%88%AB"><span class="toc-number">5.</span> <span class="toc-text">Last-Modified&#x2F;Etag区别</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post markdown-article" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        聊聊浏览器的缓存策略
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">alileew</span>
+      </span>|  -->
+      <!-- <span id="busuanzi_container_page_pv" style='display: none'>
+        <i class="fa fa-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> | 
+      </span> -->
+      
+    <div class="postdate">
+      
+        <time datetime="2022-03-27T03:08:31.000Z" itemprop="datePublished">2022-03-27</time>
+        
+      
+    </div>
+
+
+      <span class="post-count">| 1.8k字</span>
+      <span class="post-count">| 6分钟</span>
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/" rel="tag">浏览器缓存</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content markdown-content" itemprop="articleBody">
+    <h2 id="为什么会有浏览器缓存策略"><a href="#为什么会有浏览器缓存策略" class="headerlink" title="为什么会有浏览器缓存策略"></a>为什么会有浏览器缓存策略</h2><ol>
+<li>减少重复数据请求，避免通过网络再次加载资源，节省流量。</li>
+<li>降低服务器的压力，提升网站性能。</li>
+<li>加快客户端加载网页的速度， 提升用户体验。</li>
+</ol>
+<h2 id="何谓-【强缓存-vs-协商缓存】"><a href="#何谓-【强缓存-vs-协商缓存】" class="headerlink" title="何谓 【强缓存 vs 协商缓存】"></a>何谓 【强缓存 vs 协商缓存】</h2><p>强缓存:<br>若浏览器有缓存副本且未过期，则直接使用强缓存版本 <code>cache-control: max-age</code></p>
+<p>协商缓存:<br>即使本地有副本，也会携带缓存标识 <code>If-modified-since/If-none-match</code>到服务器验证副本有效性,<br>如果生效返回<code>304</code>，负责直接返回<code>200</code></p>
+<h2 id="页面如何命中-强缓存和协商缓存？"><a href="#页面如何命中-强缓存和协商缓存？" class="headerlink" title="页面如何命中 强缓存和协商缓存？"></a>页面如何命中 强缓存和协商缓存？</h2><p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/202204051756683.png"></p>
+<figcaption>浏览器缓存经典流程图-202204051756683.png</figcaption>
+
+<p>首先我们引用上面这幅经典的流程图进行说明：</p>
+<ol>
+<li>浏览器在访问页面的时候，判断页面是否有被缓存过，如果有缓存，直接从缓存中读取数据进行访问即可。</li>
+<li>如果没有缓存或缓存已过期，访问页面后，服务器会在<code>Response Headers</code>（在 Header 内的字段用于控制缓存机制）中返回一个<code>Etag</code>的标识符，第二次访问此页面时，会在<code>Request Headers</code>（在 Header 内的字段用于控制缓存机制）中携带对应的<code>If-none-match</code>，这个<code>If-none-match</code>和上面后端返回的<code>Etag</code>是一致的，因为值是<code>Etag</code>的值,这时候服务器会进行决策，如果返回<code>200</code>则请求响应，进行缓存协商。如果返回<code>304</code>，则从缓存读取。</li>
+<li>步骤同2，如果<code>Etag</code>没有，则对应的查看是否有<code>last-modified</code>…..</li>
+<li>如果<code>Etag</code>和<code>last-modified</code>都不存在，此时就只能服务器请求新的资源了…</li>
+</ol>
+<h2 id="网址链接实例讲解"><a href="#网址链接实例讲解" class="headerlink" title="网址链接实例讲解"></a>网址链接实例讲解</h2><p>我们以 juejin.cn 为例进行讲解</p>
+<p>首次访问新链接后，页面会走协商缓存，服务端会在<code>Response Headers</code>中返回一个<code>Etag</code>的标识符。<br><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/202204051946208.png"></p>
+<figcaption>首次输入juejin.cn链接后...202204051946208.png</figcaption>
+
+<hr>
+<p>再次（第二次）访问此链接后，<code>Request Headers</code>中携带对应的<code>If-none-match</code>，这个<code>If-none-match</code>和上面后端返回的<code>Etag</code>是一致的。此时携带此标识（If-none-match）到服务器端验证副本有效性，如果生效返回<code>304</code>，否则直接返回结果<code>200</code><br><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/202204051953938.png"></p>
+<figcaption>再次访问juejin.cn链接后,标识符匹配后...202204051953938.png</figcaption>
+
+<hr>
+<p>间隔一段时间后，缓存失效后，再次访问juejin.cn链接后, <code>If-none-match和Etag不一致</code>，此时缓存时效，此时会重新请求服务器获取新的资源<br><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/202204052008883.png"></p>
+<figcaption>缓存失效后，再次访问juejin.cn链接后,标识符不一致时...202204052008883.png</figcaption>
+
+<hr>
+<p><b>画个图 总结一下</b>（这里以Etag和If-none-match为例）:<br>Last-Modified和If-modified-since流程同Etag和If-none-match一致</p>
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/202204052020316.png"></p>
+<figcaption>强缓存/协商缓存小结图-202204052020316.png</figcaption>
+
+<p>Etag是服务器响应请求时，返回当前资源文件的一个唯一标识(由服务器生成)，If-none-match是客户端再次发起该请求时，携带上次请求返回的唯一标识Etag值，通过此字段值告诉服务器该资源上次请求返回的唯一标识值。服务器收到该请求后，发现该请求头中含有If-none-match，则会根据If-none-match的字段值与该资源在服务器的Etag值做对比，一致则返回304，代表资源无更新，继续使用缓存文件；不一致则重新返回资源文件，状态码为200。</p>
+<p>If-modified-since则是客户端再次发起该请求时，携带上次请求返回的Last-Modified值，通过此字段值告诉服务器该资源上次请求返回的最后被修改时间。服务器收到该请求，发现请求头含有If-modified-since字段，则会根据If-modified-since的字段值与该资源在服务器的最后被修改时间做对比，若服务器的资源最后被修改时间大于If-modified-since的字段值，则重新返回资源，状态码为200；否则则返回304，代表资源无更新，可继续使用缓存文件</p>
+<hr>
+<p><code>Etag/If-none-match</code> 优先级高于 <code>Last-Modified/If-modified-since</code></p>
+<h2 id="Last-Modified-Etag区别"><a href="#Last-Modified-Etag区别" class="headerlink" title="Last-Modified/Etag区别"></a><code>Last-Modified/Etag</code>区别</h2><p>相同点：</p>
+<ul>
+<li>两者都是用来处理协商缓存的</li>
+</ul>
+<p>不同点：</p>
+<ul>
+<li>last-modified 是根据文件修改时间，它的优点是计算量会更小，它就是根据文件的存储时间判断；但缺点就是非内容块改变（比如：只是meta标签发生了变化，但文件内容没有变化的情况下）系统也会判断这是一个新修改过的文件，这个时候就可能会造成缓存失效，还有就是last-modified单位是秒，如果一秒内修改了文件，last-modified是检测不到的。基于上面几种情况，所以选用了 Etag</li>
+<li>Etag 是根据文件内容算出摘要，只有内容变化，Etag才会发生变化，那这样就可以保证，一定是文件内容发生了变化，缓存才会失效。缺点就是有一个摘要的计算（现在是依托在服务器的<code>nginx</code>中做摘要计算），可能会比较耗时</li>
+</ul>
+<hr>
+<p><b>所以现在我们常用的比较好的缓存实践就是：</b></p>
+<ul>
+<li>文件名使用<code>hash</code>做路径标识 + 配合强缓存</li>
+<li>应用缓存 — <code>App Cache and Manifest</code>文件</li>
+<li>用<code>localstorage</code> — 做缓存</li>
+<li><code>Service Worker</code> — 实现自定义的网络请求逻辑</li>
+</ul>
+<hr>
+<blockquote>
+<p>在HTTP/1.1中，Cache-Control是最重要的规则，主要用于控制网页缓存</p>
+</blockquote>
+<p>Cache-Control: </p>
+<ol>
+<li>public：所有内容都将被缓存（客户端和代理服务器都可缓存）</li>
+<li>private：所有内容只有客户端可以缓存，Cache-Control的默认取值</li>
+<li>no-cache【<code>重点</code>】：告诉浏览器、缓存服务器，不管本地副本是否过期(last-modified)适应资源副本前一定要到原服务器进行副本有效性校验. 简单理解就是：<code>指示浏览器每次使用url的缓存版本之前都必须与服务器重新验证</code></li>
+<li>no-store：所有内容都不会被缓存，即不使用强制缓存，也不使用协商缓存</li>
+<li>max-age=xxx (xxx is numeric)：缓存内容将在xxx秒后失效</li>
+<li>must-revalidate：告诉浏览器、缓存服务器，本地副本过期前，可以使用本地副本；本地副本一旦过期，必须去源服务器进行有效性校验</li>
+</ol>
+<p>注意：<code>cache-control: max-age=0</code> 暗示内容立即被认为是陈旧的（并且必须重新获取），这实际上与<code>cache-control: no-cache</code> 相同</p>
+<hr>
+<p>注意点：</p>
+<ol>
+<li>获取缓存检测缓存是否过期，如果没过期取缓存</li>
+<li>优先从内存，其次硬盘，如果过期，则与服务器协商缓存是否仍然可用，如果不可用则获取，可用取缓存</li>
+<li>cache会在页面关闭时写入磁盘，下次打开同一站点时检测到未过期则会使用disk</li>
+</ol>
+<hr>
+<p>如果文章有错误或者不严谨的地方，请务必给予指正，十分感谢 ~</p>
+
+  </div>
+</article>
+ 
+<!-- 下面添加 Gitalk 部分 -->
+
+
+<!-- valine Comments -->
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<!-- <script src="https://cdn.fayne.cn/js/Valine.min.js"></script> -->
+<div id="vcomments" style="margin-top: 30px"></div>
+<script type="text/javascript">
+  new Valine({
+    el: "#vcomments",
+    appId: "5Ah2dYXOOS7ryWdhr9z0BP9h-gzGzoHsz",
+    appKey: "JxuAq1gr9Q2b54FVIAj0bIcp",
+    avatar: "retro",
+    placeholder: "说点什么？证明你来过 ~",
+    pageSize: 10,
+  });
+</script>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/alileew">Projects</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E6%9C%89%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5"><span class="toc-number">1.</span> <span class="toc-text">为什么会有浏览器缓存策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%95%E8%B0%93-%E3%80%90%E5%BC%BA%E7%BC%93%E5%AD%98-vs-%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98%E3%80%91"><span class="toc-number">2.</span> <span class="toc-text">何谓 【强缓存 vs 协商缓存】</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E5%A6%82%E4%BD%95%E5%91%BD%E4%B8%AD-%E5%BC%BA%E7%BC%93%E5%AD%98%E5%92%8C%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">页面如何命中 强缓存和协商缓存？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E5%9D%80%E9%93%BE%E6%8E%A5%E5%AE%9E%E4%BE%8B%E8%AE%B2%E8%A7%A3"><span class="toc-number">4.</span> <span class="toc-text">网址链接实例讲解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Last-Modified-Etag%E5%8C%BA%E5%88%AB"><span class="toc-number">5.</span> <span class="toc-text">Last-Modified&#x2F;Etag区别</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/archives/60150/"
+      ><i class="fab fa-facebook fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/archives/60150/&text=聊聊浏览器的缓存策略"
+      ><i class="fab fa-twitter fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/archives/60150/&title=聊聊浏览器的缓存策略"
+      ><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/archives/60150/&is_video=false&description=聊聊浏览器的缓存策略"
+      ><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      href="mailto:?subject=聊聊浏览器的缓存策略&body=Check out this article: http://example.com/archives/60150/"
+      ><i class="fas fa-envelope fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/archives/60150/&title=聊聊浏览器的缓存策略"
+      ><i
+        class="fab fa-get-pocket fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/archives/60150/&title=聊聊浏览器的缓存策略"
+      ><i class="fab fa-reddit fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/archives/60150/&title=聊聊浏览器的缓存策略"
+      ><i
+        class="fab fa-stumbleupon fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/archives/60150/&title=聊聊浏览器的缓存策略"
+      ><i class="fab fa-digg fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/archives/60150/&name=聊聊浏览器的缓存策略&description="
+      ><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/archives/60150/&t=聊聊浏览器的缓存策略"
+      ><i
+        class="fab fa-hacker-news fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;   2021-2025
+    alileew
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       -->
+        <li>
+          <a href="/"
+            >Home</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/archives/"
+            >Archives</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a target="_blank" rel="noopener" href="https://github.com/alileew"
+            >Projects</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/tags/"
+            >Tags</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/about/"
+            >About</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/search/"
+            >Search</a
+          >
+        </li>
+        <!--
+     -->
+      </ul>
+    </nav>
+  </div>
+  <div style="width: 100%; margin-top: 10px; text-align: center">
+    你的努力, 值得被更多人看见, 正如现在努力的你 
+    <!-- <span id="busuanzi_container_site_pv" style='display:none'>
+      <i class="fa fa-eye" aria-hidden="true"></i>
+      <span id="busuanzi_value_site_pv"></span>
+    </span>  -->
+    <!-- <span id="busuanzi_container_site_uv" style='display:none'>
+      <i class="fa fa-user" aria-hidden="true"></i>
+      <span id="busuanzi_value_site_uv"></span>
+    </span> -->
+  </div>
+</footer>
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+<!-- tag cloud 样式引入 -->
+<link
+  rel="stylesheet"
+  href="/css/tags.css"
+/>
+<link
+  rel="stylesheet"
+  href="/css/matery.css"
+/>
+<link
+  rel="stylesheet"
+  href="/css/markdown.css"
+/>
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- busuanzi -->
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a88fecc80aabf2ada5465a20";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+<script type="text/javascript">
+  var typed = new Typed('#home_faith', {
+    strings: ["坚持, 有常, 是成事的第一要素. 日日行, 不怕千万里. 常常做, 不怕千万事."],
+    typeSpeed: 100,
+    cursorChar: '',
+  });
+</script>
+<script type="text/javascript">
+  var typed = new Typed('#faith', {
+    strings: ["坚持, 有常, 是成事的第一要素. 日日行, 不怕千万里. 常常做, 不怕千万事."],
+    typeSpeed: 100,
+    cursorChar: '',
+  });
+</script>
+<script type="text/javascript">
+  var typed = new Typed('#text-slider', {
+    strings: ["你似乎来到了没有知识存在的荒原"],
+    typeSpeed: 100, // 打字速度
+    backSpeed: 50, // 回退速度(多个数组的时候，才生效)
+    cursorChar: '|',
+  });
+</script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>
+<script type="text/javascript">
+  // 切换 背景主题
+  function switchNightMode() {
+    $("html").hasClass("LightMode")
+      ? ($("html").removeClass("LightMode"),
+        localStorage.setItem("themeMode", "dark"),
+        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o"))
+      : ($("html").addClass("LightMode"),
+        localStorage.setItem("themeMode", "white"),
+        $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o"))
+  }
+</script>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', (event) => {
+    (localStorage.getItem('themeMode') === 'dark') 
+      ? (
+        document.querySelector('html').classList.remove('dark'),
+        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o")
+      )
+      :(
+        $("html").addClass("LightMode"),
+        $("#nightMode").removeClass("fa-moon-o").addClass('fa-lightbulb-o')
+      )
+  })
+</script>
+<div onclick="switchNightMode()" id="sma" title="切换主题">
+  <i class="fa fa-moon-o" id="nightMode"  aria-hidden="false"></i>
+</div>

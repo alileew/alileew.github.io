@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="在面试时，我常问候选人老生常谈的一个问题便是「聊聊你对闭包的理解，闭包是如何存储变量的？又是如何回收的？」 百分之90的候选人，都是回答：”函数内部可以访问外部的变量，就形成了闭包”，当然我不能说候选人这种说法一定是错的，只是太字面了。于是，我继续追问，可以再具体一点吗？为什么内部可以访问外部的变量就形成了闭包，它是怎么存储并回收的呢？这时候，候选人就回答不上来了。 如果对闭包理解深一点的同学可能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端经典面试之闭包">
+<meta property="og:url" content="http://example.com/archives/46656/index.html">
+<meta property="og:site_name" content="Alileew&#39;s Blog">
+<meta property="og:description" content="在面试时，我常问候选人老生常谈的一个问题便是「聊聊你对闭包的理解，闭包是如何存储变量的？又是如何回收的？」 百分之90的候选人，都是回答：”函数内部可以访问外部的变量，就形成了闭包”，当然我不能说候选人这种说法一定是错的，只是太字面了。于是，我继续追问，可以再具体一点吗？为什么内部可以访问外部的变量就形成了闭包，它是怎么存储并回收的呢？这时候，候选人就回答不上来了。 如果对闭包理解深一点的同学可能">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/202203131043147.png">
+<meta property="article:published_time" content="2022-03-13T01:39:55.000Z">
+<meta property="article:modified_time" content="2022-04-04T03:05:29.000Z">
+<meta property="article:author" content="alileew">
+<meta property="article:tag" content="JS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/202203131043147.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>前端经典面试之闭包</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+    
+  <!-- highlight plugin css cdn -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/atom-one-dark.min.css"
+    integrity="sha512-Jk4AqjWsdSzSWCSuQTfYRIF84Rq/eV0G2+tu07byYwHcbTGfdmLrHjUSwvzp5HvbiqK4ibmNwdcG49Y5RGYPTg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+	<!-- mathjax -->
+	
+
+  <!-- highlight plugin js cdn -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"
+    integrity="sha512-BNc7saQYlxCL10lykUYhFBcnzdKMnjx5fp5s5wPucDyZ7rKNwCoqJh1GwEAIhuePEK4WM9askJBRsu7ma0Rzvg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Archives</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/alileew">Projects</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/archives/60809/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/archives/3006/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/archives/46656/"
+      ><i class="fab fa-facebook " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/archives/46656/&text=前端经典面试之闭包"
+      ><i class="fab fa-twitter " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/archives/46656/&title=前端经典面试之闭包"
+      ><i class="fab fa-linkedin " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/archives/46656/&is_video=false&description=前端经典面试之闭包"
+      ><i class="fab fa-pinterest " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      href="mailto:?subject=前端经典面试之闭包&body=Check out this article: http://example.com/archives/46656/"
+      ><i class="fas fa-envelope " aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/archives/46656/&title=前端经典面试之闭包"
+      ><i
+        class="fab fa-get-pocket "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/archives/46656/&title=前端经典面试之闭包"
+      ><i class="fab fa-reddit " aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/archives/46656/&title=前端经典面试之闭包"
+      ><i
+        class="fab fa-stumbleupon "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/archives/46656/&title=前端经典面试之闭包"
+      ><i class="fab fa-digg " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/archives/46656/&name=前端经典面试之闭包&description="
+      ><i class="fab fa-tumblr " aria-hidden="true"></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/archives/46656/&t=前端经典面试之闭包"
+      ><i
+        class="fab fa-hacker-news "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post markdown-article" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        前端经典面试之闭包
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">alileew</span>
+      </span>|  -->
+      <!-- <span id="busuanzi_container_page_pv" style='display: none'>
+        <i class="fa fa-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> | 
+      </span> -->
+      
+    <div class="postdate">
+      
+        <time datetime="2022-03-13T01:39:55.000Z" itemprop="datePublished">2022-03-13</time>
+        
+      
+    </div>
+
+
+      <span class="post-count">| 2.6k字</span>
+      <span class="post-count">| 9分钟</span>
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/JS/" rel="tag">JS</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content markdown-content" itemprop="articleBody">
+    <p>在面试时，我常问候选人老生常谈的一个问题便是「聊聊你对闭包的理解，闭包是如何存储变量的？又是如何回收的？」</p>
+<p>百分之90的候选人，都是回答：”函数内部可以访问外部的变量，就形成了闭包”，当然我不能说候选人这种说法一定是错的，只是太字面了。于是，我继续追问，可以再具体一点吗？为什么内部可以访问外部的变量就形成了闭包，它是怎么存储并回收的呢？这时候，候选人就回答不上来了。</p>
+<p><b>如果对闭包理解深一点的同学可能会这么回答：</b><br>「在 JavaScript中，根据词法作用域的规则，内部函数总是可以访问其外部函数中声明的变量，当通过调用一个外部函数返回一个内部函数后，即使该外部函数已经执行结束了，但是内部函数引用外部函数的变量依然保存在内存中，我们就把这些变量的集合称为闭包」这个回答还算标准一些，至少他了解闭包中的函数什么时候会执行结束，知道变量会被存在内存中。</p>
+<p>其实，想要回答好闭包这个问题。那么理解作用域链是理解闭包的基础，但理解作用域链又需要了解 <code>调用栈、执行上下文、词法环境、变量环境。</code></p>
+<p>变量是通过作用域链来查找的，变量的作用域是由词法决定的，也就是说作用域是在你写代码的时候就已经决定了的(取决于代码的位置)。那么什么是词法作用域呢？</p>
+<p>💡 词法作用域就是指作用域是由代码中函数声明的位置来决定的，所以词法作用域是静态的作用域，通过它就能够预测代码在执行过程中如何查找标识符。</p>
+<p>💡 <code>词法作用域是代码编译阶段就决定好的</code> 和函数是怎么调用的没有关系。JavaScript 语言的作用域链是由词法作用域决定的，而词法作用域是由代码结构来确定的。</p>
+<blockquote>
+<p>引用《你不知道的js》中的定义：<br>  闭包是基于词法作用域书写代码时所产生的自然结果。当函数可以记住并访问所在的词法作用域时，就产生了闭包，即使函数是在当前词法作用域之外执行。</p>
+</blockquote>
+<p><b>那么 闭包是如何回收的：</b><br>通常，如果引用闭包的函数是一个全局变量，那么闭包会一直存在直到页面关闭；但如果这个闭包以后不再使用的话，就会造成内存泄漏。如果引用闭包的函数是个局部变量，等函数销毁后，在下次 JavaScript 引擎执行垃圾回收时，判断闭包这块内容如果已经不再被使用了，那么 JavaScript 引擎的垃圾回收器就会回收这块内存。</p>
+<p><b>使用必要需要注意的原则：</b><br>💡 如果该闭包会一直使用，那么他可以作为全局变量而存在；但如果使用率不高，而且占用内存又比较大的话，那就让他成为一个局部变量</p>
+<p>上面我们简单总结了闭包的大概流程，下面就从堆栈空间的角度在深入分析闭包的形成及调用过程.<br>在理解这个概念之前，首先我们要知道 “内存空间”，JS的内存模型包含三种类型的内存空间，分别是：</p>
+<ul>
+<li>代码空间（主要用来存储可执行代码的）</li>
+<li>堆空间（主要用来存储对象类型）<ul>
+<li>缺点：分配内存和回收内存会占用一定的时间</li>
+</ul>
+</li>
+<li>栈空间（其实就是调用栈，用来存储执行上下文的，主要存放一些原始类型的小数据）</li>
+</ul>
+<p>对象类型是存放在堆空间的，在栈空间只是保留了对象的引用地址，当JS需要访问数据的时候，是通过栈中的引用地址来访问的（这块是不是想起了基本类型和引用类型的区别）</p>
+<p>所以，你可以理解成，<code>原始类型的数据值都是用来直接保存&quot;栈&quot;中的, 引用类型的值是存放在&quot;堆&quot;中的</code></p>
+<p>说了这么多很干的概念，为了带你回顾上面的概念，不只是停留在闭包概念的理解，这里引入代码进行解读：</p>
+<pre><code class="javascript">function foo() &#123;
+  var myName = &quot;李小宝&quot;
+  let test1 = 1
+  const test2 = 2
+  var innerBar = &#123; 
+    setName:function(newName)&#123;
+      myName = newName
+    &#125;,
+    getName:function()&#123;
+      console.log(test1)
+        return myName
+      &#125;
+    &#125;
+  return innerBar
+&#125;
+var bar = foo()
+bar.setName(&quot;李大宝&quot;)
+bar.getName()
+console.log(bar.getName())
+</code></pre>
+<p><b>分析阶段：</b><br>由于变量 myName、test1、test2 都是原始类型数据，所以在执行foo函数的时候，它们会被压入到调用栈中；当foo函数执行结束之后，调用栈中foo函数的执行上下文会被销毁，但是因为foo函数产生了闭包，所以变量myName和test1并没有被销毁，而是保存在内存中。</p>
+<p>为什么会保存在内存中？「首先要站在内存模型的角度分析代码的执行流程」</p>
+<ol>
+<li>当 JavaScript 引擎执行到 foo 函数时，首先会编译，并创建一个空执行上下文。</li>
+<li>在编译过程中，遇到内部函数 setName，JavaScript 引擎还要对内部函数做一次快速的词法扫描，发现该内部函数引用了 foo 函数中的 myName 变量，由于是内部函数引用了外部函数的变量，所以 JavaScript 引擎判断这是一个闭包，于是在堆空间创建了一个“closure(foo)”的对象（这是一个内部对象，JavaScript 是无法访问的），用来保存 myName 变量。</li>
+<li>接着继续扫描到 getName 方法时，发现该函数内部还引用变量 test1，于是 JavaScript 引擎又将 test1 添加到“closure(foo)”对象中。这时候堆中的“closure(foo)”对象中就包含了 myName 和 test1 两个变量了。</li>
+<li>由于 test2 并没有被内部函数引用，所以 test2 依然保存在调用栈中。</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/alileew/alileew_images/img/202203131043147.png"></p>
+<figcaption>js-202203131043147.png</figcaption>
+
+<p>从上图你可以清晰地看出，当执行到 foo 函数时，闭包就产生了；当 foo 函数执行结束之后，返回的 getName 和 setName 方法都引用“clourse(foo)”对象，所以即使 foo 函数退出了，“clourse(foo)”依然被其内部的 getName 和 setName 方法引用。所以在下次调用bar.setName或者bar.getName时，创建的执行上下文中就包含了“clourse(foo)”</p>
+<p><strong><code>结论：产生闭包的核心有两步：</code></strong></p>
+<ul>
+<li><strong><code>第一步是需要预扫描内部函数；</code></strong></li>
+<li><strong><code>第二步是把内部函数引用的外部变量保存到堆中。</code></strong></li>
+</ul>
+<hr>
+<p>现在我们通过上面的例子，已经了解了闭包的产生及存储过程。下面，我为你准备了一个更简单的例子，直接对着这个来回答闭包的问题，话不多说，上代码：</p>
+<pre><code class="javascript">// 举一个简单的例子进行说明:
+function A() &#123;
+  var a = &#39;我是小a&#39;;
+  let b = &quot;我是小b&quot;
+  var B = function() &#123;
+    console.log(a)
+  &#125;
+  return B()
+&#125;
+A()
+</code></pre>
+<p><b>引用上面的概念：</b><br>在JavaScript中，根据词法作用域的规则，内部函数总是可以访问其外部函数中声明的变量，当通过调用一个外部函数返回一个内部函数后，即使该外部函数已经执行结束了，但是内部函数引用外部函数的变量依然保存在内存中，我们就把这些变量的集合称为闭包。</p>
+<p><b>简单理解就是：</b><br>A函数中有个B函数，B函数可以访问A函数中的变量，此时就把A函数中的变量的集合称为闭包。由于A函数中的变量a是原始类型数据，所以在执行A函数的时候，它会被压入到调用栈中；当A函数执行结束之后，调用栈中A函数的执行上下文会被销毁，但是因为A函数产生了闭包，所以变量a并没有被销毁，而是保存在内存中。</p>
+<p><b>变量a之所以会被保存在内存中:</b><br>主要是因为在编译代码的过程中，遇到内部函数B的时候，<code>JS引擎对内部函数要做一次快速的词法扫描</code> ，如果发现该内部函数引用了A函数中的a变量，JS引擎判断出这个一个闭包，就在堆空间创建了一个<code>&quot;closure(A)&quot;</code> 的对象（这是一个内部对象，JS是无法访问的），这个对象用来保存a变量。如果还有其它的变量，也依次将其添加到这个<code>&quot;closure(A)&quot;</code> 对象中。<code>由于变量b并没有被内部函数引用，所以b依然保存在调用栈中。</code></p>
+<p><b>为什么函数B函数执行退出后，为什么A函数中的a还被引用？</b><br>这是因为B函数退出后，”closure(A)”依然被其内部的B函数引用。所以在下次调用A函数的时候，创建的执行上下文中就包含了”closure(A)”</p>
+<p><b>内存是如何泄漏的？如何避免写代码的时候产生内存泄漏?</b><br>1.函数A声明的变量a在函数B被执行成功退出之后，依然保留对a的引用，没有及时卸载掉，内存依然还在，就产生了内存泄漏。<br>2.及时清除未使用过的变量 如：a = null; 或者尽量避免在内部作用域内声明函数对外部的引用。</p>
+<p>以上就是对闭包原理的解读以及如何更好的回答面试官 关于闭包的这个问题的阐述，相信你下一次再被面试官问到这个问题的时候，能从上面的角度去回答，那会给面试官一个很大的惊喜。</p>
+
+  </div>
+</article>
+ 
+<!-- 下面添加 Gitalk 部分 -->
+
+
+<!-- valine Comments -->
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<!-- <script src="https://cdn.fayne.cn/js/Valine.min.js"></script> -->
+<div id="vcomments" style="margin-top: 30px"></div>
+<script type="text/javascript">
+  new Valine({
+    el: "#vcomments",
+    appId: "5Ah2dYXOOS7ryWdhr9z0BP9h-gzGzoHsz",
+    appKey: "JxuAq1gr9Q2b54FVIAj0bIcp",
+    avatar: "retro",
+    placeholder: "说点什么？证明你来过 ~",
+    pageSize: 10,
+  });
+</script>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/alileew">Projects</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/archives/46656/"
+      ><i class="fab fa-facebook fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/archives/46656/&text=前端经典面试之闭包"
+      ><i class="fab fa-twitter fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/archives/46656/&title=前端经典面试之闭包"
+      ><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/archives/46656/&is_video=false&description=前端经典面试之闭包"
+      ><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      href="mailto:?subject=前端经典面试之闭包&body=Check out this article: http://example.com/archives/46656/"
+      ><i class="fas fa-envelope fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/archives/46656/&title=前端经典面试之闭包"
+      ><i
+        class="fab fa-get-pocket fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/archives/46656/&title=前端经典面试之闭包"
+      ><i class="fab fa-reddit fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/archives/46656/&title=前端经典面试之闭包"
+      ><i
+        class="fab fa-stumbleupon fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/archives/46656/&title=前端经典面试之闭包"
+      ><i class="fab fa-digg fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/archives/46656/&name=前端经典面试之闭包&description="
+      ><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/archives/46656/&t=前端经典面试之闭包"
+      ><i
+        class="fab fa-hacker-news fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;   2021-2025
+    alileew
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       -->
+        <li>
+          <a href="/"
+            >Home</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/archives/"
+            >Archives</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a target="_blank" rel="noopener" href="https://github.com/alileew"
+            >Projects</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/tags/"
+            >Tags</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/about/"
+            >About</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/search/"
+            >Search</a
+          >
+        </li>
+        <!--
+     -->
+      </ul>
+    </nav>
+  </div>
+  <div style="width: 100%; margin-top: 10px; text-align: center">
+    你的努力, 值得被更多人看见, 正如现在努力的你 
+    <!-- <span id="busuanzi_container_site_pv" style='display:none'>
+      <i class="fa fa-eye" aria-hidden="true"></i>
+      <span id="busuanzi_value_site_pv"></span>
+    </span>  -->
+    <!-- <span id="busuanzi_container_site_uv" style='display:none'>
+      <i class="fa fa-user" aria-hidden="true"></i>
+      <span id="busuanzi_value_site_uv"></span>
+    </span> -->
+  </div>
+</footer>
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+<!-- tag cloud 样式引入 -->
+<link
+  rel="stylesheet"
+  href="/css/tags.css"
+/>
+<link
+  rel="stylesheet"
+  href="/css/matery.css"
+/>
+<link
+  rel="stylesheet"
+  href="/css/markdown.css"
+/>
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- busuanzi -->
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a88fecc80aabf2ada5465a20";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+<script type="text/javascript">
+  var typed = new Typed('#home_faith', {
+    strings: ["坚持, 有常, 是成事的第一要素. 日日行, 不怕千万里. 常常做, 不怕千万事."],
+    typeSpeed: 100,
+    cursorChar: '',
+  });
+</script>
+<script type="text/javascript">
+  var typed = new Typed('#faith', {
+    strings: ["坚持, 有常, 是成事的第一要素. 日日行, 不怕千万里. 常常做, 不怕千万事."],
+    typeSpeed: 100,
+    cursorChar: '',
+  });
+</script>
+<script type="text/javascript">
+  var typed = new Typed('#text-slider', {
+    strings: ["你似乎来到了没有知识存在的荒原"],
+    typeSpeed: 100, // 打字速度
+    backSpeed: 50, // 回退速度(多个数组的时候，才生效)
+    cursorChar: '|',
+  });
+</script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>
+<script type="text/javascript">
+  // 切换 背景主题
+  function switchNightMode() {
+    $("html").hasClass("LightMode")
+      ? ($("html").removeClass("LightMode"),
+        localStorage.setItem("themeMode", "dark"),
+        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o"))
+      : ($("html").addClass("LightMode"),
+        localStorage.setItem("themeMode", "white"),
+        $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o"))
+  }
+</script>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', (event) => {
+    (localStorage.getItem('themeMode') === 'dark') 
+      ? (
+        document.querySelector('html').classList.remove('dark'),
+        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o")
+      )
+      :(
+        $("html").addClass("LightMode"),
+        $("#nightMode").removeClass("fa-moon-o").addClass('fa-lightbulb-o')
+      )
+  })
+</script>
+<div onclick="switchNightMode()" id="sma" title="切换主题">
+  <i class="fa fa-moon-o" id="nightMode"  aria-hidden="false"></i>
+</div>

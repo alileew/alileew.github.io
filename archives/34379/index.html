@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="日常开发中，echarts 的使用率还是挺高的，但是每次使用的时候，总要去官网 查找对应的配置表进行配置，感觉特别麻烦，所以在日常开发中，对一些常用的配置，做一些总结，方便日后在做可视化界面开发的时候，可以直接查看这些配置，提升开发效率。 const option &#x3D; &amp;#123;   &#x2F;&#x2F; 左上角标题   title: &amp;#123;     text: &quot;我是标题&quot;,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="echarts 基础属性配置单">
+<meta property="og:url" content="http://example.com/archives/34379/index.html">
+<meta property="og:site_name" content="Alileew&#39;s Blog">
+<meta property="og:description" content="日常开发中，echarts 的使用率还是挺高的，但是每次使用的时候，总要去官网 查找对应的配置表进行配置，感觉特别麻烦，所以在日常开发中，对一些常用的配置，做一些总结，方便日后在做可视化界面开发的时候，可以直接查看这些配置，提升开发效率。 const option &#x3D; &amp;#123;   &#x2F;&#x2F; 左上角标题   title: &amp;#123;     text: &quot;我是标题&quot;,">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-17T02:25:08.000Z">
+<meta property="article:modified_time" content="2023-10-17T03:00:37.000Z">
+<meta property="article:author" content="alileew">
+<meta property="article:tag" content="echarts">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>echarts 基础属性配置单</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+    
+  <!-- highlight plugin css cdn -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/atom-one-dark.min.css"
+    integrity="sha512-Jk4AqjWsdSzSWCSuQTfYRIF84Rq/eV0G2+tu07byYwHcbTGfdmLrHjUSwvzp5HvbiqK4ibmNwdcG49Y5RGYPTg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+	<!-- mathjax -->
+	
+
+  <!-- highlight plugin js cdn -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"
+    integrity="sha512-BNc7saQYlxCL10lykUYhFBcnzdKMnjx5fp5s5wPucDyZ7rKNwCoqJh1GwEAIhuePEK4WM9askJBRsu7ma0Rzvg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Archives</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/alileew">Projects</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/archives/807/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/archives/1711/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/archives/34379/"
+      ><i class="fab fa-facebook " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/archives/34379/&text=echarts 基础属性配置单"
+      ><i class="fab fa-twitter " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/archives/34379/&title=echarts 基础属性配置单"
+      ><i class="fab fa-linkedin " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/archives/34379/&is_video=false&description=echarts 基础属性配置单"
+      ><i class="fab fa-pinterest " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      href="mailto:?subject=echarts 基础属性配置单&body=Check out this article: http://example.com/archives/34379/"
+      ><i class="fas fa-envelope " aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/archives/34379/&title=echarts 基础属性配置单"
+      ><i
+        class="fab fa-get-pocket "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/archives/34379/&title=echarts 基础属性配置单"
+      ><i class="fab fa-reddit " aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/archives/34379/&title=echarts 基础属性配置单"
+      ><i
+        class="fab fa-stumbleupon "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/archives/34379/&title=echarts 基础属性配置单"
+      ><i class="fab fa-digg " aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/archives/34379/&name=echarts 基础属性配置单&description="
+      ><i class="fab fa-tumblr " aria-hidden="true"></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/archives/34379/&t=echarts 基础属性配置单"
+      ><i
+        class="fab fa-hacker-news "
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+</ul>
+
+    </div>
+    <div id="toc">
+      
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post markdown-article" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        echarts 基础属性配置单
+    </h1>
+
+
+
+    <div class="meta">
+      <!-- <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">alileew</span>
+      </span>|  -->
+      <!-- <span id="busuanzi_container_page_pv" style='display: none'>
+        <i class="fa fa-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> | 
+      </span> -->
+      
+    <div class="postdate">
+      
+        <time datetime="2023-10-17T02:25:08.000Z" itemprop="datePublished">2023-10-17</time>
+        
+      
+    </div>
+
+
+      <span class="post-count">| 1.2k字</span>
+      <span class="post-count">| 5分钟</span>
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/echarts/" rel="tag">echarts</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content markdown-content" itemprop="articleBody">
+    <p>日常开发中，echarts 的使用率还是挺高的，但是每次使用的时候，总要去<a target="_blank" rel="noopener" href="https://echarts.apache.org/zh/index.html">官网</a> 查找对应的配置表进行配置，感觉特别麻烦，所以在日常开发中，对一些常用的配置，做一些总结，方便日后在做可视化界面开发的时候，可以直接查看这些配置，提升开发效率。</p>
+<pre><code class="javascript">const option = &#123;
+  // 左上角标题
+  title: &#123;
+    text: &quot;我是标题&quot;,
+    left: 0, // 距左侧的距离
+    top: 10, // 距顶部的距离
+    textStyle: &#123;
+      fontSize: 13, // 标题大小
+      color: &quot;#45F9F1&quot;, // 标题颜色
+    &#125;,
+  &#125;,
+
+  // 匹配多个颜色
+  color: [&quot;#F8E71C&quot;, &quot;#507df7&quot;, &quot;#F5A623&quot;, &quot;#47D1CB&quot;],
+
+  // 顶部快捷导航的小banner
+  legend: &#123;
+    right: 0, // 靠近最右侧显示，如果不加right 默认会居中显示
+    top: &quot;5px&quot;, // 距离顶部的距离
+    icon: &quot;rect&quot;, // 线条类型
+    itemWidth: 12, // 线条宽
+    itemHeight: 5, // 线条高
+    textStyle: &#123;
+      color: &quot;#fff&quot;, // 文字颜色
+    &#125;,
+  &#125;,
+
+  // 可视化图距上/下/左/右的距离
+  grid: &#123;
+    top: &quot;15%&quot;,
+    left: &quot;3%&quot;,
+    right: &quot;4%&quot;,
+    bottom: &quot;3%&quot;,
+    // containLabel指的是grid 区域是否包含坐标轴的刻度标签
+    containLabel: true,
+  &#125;,
+
+  // 鼠标悬浮展示的数据
+  tooltip: &#123;
+    // 鼠标hover显示自定义 (若没有额外的样式进行展示，可直接保留trigger这一个默认属性的展示即可)
+    trigger: &quot;axis&quot;,
+    axisPointer: &#123;
+      type: &quot;shadow&quot;, // 鼠标hover时，整块区域覆盖阴影
+    &#125;,
+    textStyle: &#123;
+      color: &quot;#D6D6D6&quot;, // 文字颜色
+    &#125;,
+    borderColor: &quot;rgba(0,0,0,0.8)&quot;, // 文字边框
+    backgroundColor: &quot;rgba(30, 37, 45, 1)&quot;, // tooltip整块背景
+    formatter: function (params) &#123;
+      // 注意：如果需要展示多个，在series中data的数据一定要是一个数组对象，且对象中必须有value的值
+      // data: [1,2,3] 等同于 data: [&#123;value: 1&#125;, &#123;value: 2&#125;,&#123;value: 3&#125;]
+      // 然后将额外的需要展示的数据放到对应的每个对象里 然后展示的时候取出来就可以了)
+      return (
+        `&lt;div style=&quot;display:inline-block;&quot;&gt;$&#123;params[0].name&#125;&lt;/div&gt;&lt;br /&gt;` +
+        `内容: $&#123;params[0].value&#125;%`
+      );
+    &#125;,
+  &#125;,
+
+  // x轴
+  xAxis: [
+    &#123;
+      // &#39;category&#39; 类目轴，适用于离散的类目数据，为该类型时必须通过 data 设置类目数据。
+      type: &quot;category&quot;,
+      // boundaryGap：x轴两边是否留白
+      boundaryGap: true,
+      axisLine: &#123;
+        // 是否隐藏x轴线
+        show: true,
+        //x轴线的颜色以及宽度以及线条类型
+        lineStyle: &#123;
+          color: &quot;#E7E7E7&quot;,
+          width: 0,
+          type: &quot;solid&quot;,
+        &#125;,
+      &#125;,
+      axisLabel: &#123;
+        show: true,
+        //x轴文字的配置
+        textStyle: &#123;
+          color: &quot;#fff&quot;,
+        &#125;,
+      &#125;,
+      axisTick: &#123;
+        show: false, //隐藏x轴刻度
+      &#125;,
+      axisPointer: &#123;
+        // type: &quot;none&quot;, // 取消当前轴的坐标轴指示器
+        lineStyle: &#123;
+          color: &quot;#ccc&quot;, // 分割线颜色
+          width: 1, // 分割线现宽
+          opacity: 0.1, // 图形透明度
+        &#125;,
+      &#125;,
+      data: [], // x轴的数据
+    &#125;,
+  ],
+
+  // y轴
+  yAxis: [
+    &#123;
+      // &#39;value&#39; 数值轴，适用于连续数据
+      type: &quot;value&quot;,
+      axisLine: &#123;
+        show: true,
+        //y轴线的颜色以及宽度
+        lineStyle: &#123;
+          color: &quot;#E7E7E7&quot;,
+          width: 0,
+          type: &quot;solid&quot;,
+        &#125;,
+      &#125;,
+      splitLine: &#123;
+        // 修改背景线条样式
+        show: true, // 是否展示
+        lineStyle: &#123;
+          type: &quot;solid&quot;, // 分割线类型
+          color: &quot;#ccc&quot;, // 分割线颜色
+          width: 1, // 分割线现宽
+          opacity: 0.1, // 图形透明度
+        &#125;,
+      &#125;,
+      // 正常情况下，是不需要设置（min、max）这两个值的，因为其会通过series中的data中的值自动进行计算最小值和最大值
+      max: 100, // Y轴最大数值
+      min: 0, // Y轴最小数值
+    &#125;,
+  ],
+
+  series: [
+    &#123;
+      smooth: true, // 折线图是否是圆滑曲线 平滑显示
+      symbol: &quot;circle&quot;, //每个小点点的样式风格
+      showSymbol: false, //默认不展示小点点 经过再显示
+      name: &quot;当月&quot;,
+      type: &quot;line&quot;,
+      stack: &quot;Total&quot;,
+      // itemStyle: &#123;
+      //   // itemStyle属性不写，会取默认颜色作为填充（正常情况下都是默认的）如有需要定制化的，可以打开此项进行相应的配置
+      //   normal: &#123;
+      //     color: &quot;#F21612&quot;, //轨迹线和小点点的颜色
+      //     borderColor: &quot;#F21612&quot;, //小点点的边框颜色
+      //   &#125;,
+      // &#125;,
+      // lineStyle: &#123;
+      //  // lineStyle属性不写，会取默认颜色作为填充（正常情况下都是默认的）如有需要定制化的，可以打开此项进行相应的配置
+      //   normal: &#123;
+      //     width: 1, //连线粗细
+      //     color: &quot;#F21612&quot;, //轨迹线颜色
+      //   &#125;,
+      // &#125;,
+      // 如果是折线图、圆滑曲线，曲线下方的阴影区域(areaStyle)设置浅色
+      areaStyle: &#123;
+        color: &quot;#507df7&quot;, // 曲线下方阴影的颜色
+        opacity: 0.2, // 曲线下方阴影的透明度
+        origin: &quot;start&quot;,
+
+        // 这里既可以通过上面的color和opacity进行展示，如果需要渐变色处理 也可以直接在color属性上绑定渐变色处理即可（仅保留color一项即可）
+        // color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        //   &#123;
+        //     offset: 0,
+        //     color: &quot;rgba(243, 78, 98, 0.8)&quot;,
+        //   &#125;,
+        //   &#123;
+        //     offset: 1,
+        //     color: &quot;rgba(255, 255, 255, 0)&quot;,
+        //   &#125;,
+        // ]),
+      &#125;,
+      emphasis: &#123;
+        focus: &quot;series&quot;,
+      &#125;,
+      data: [120, 132, 101, 134, 90, 230, 210],
+    &#125;,
+  ],
+&#125;;
+</code></pre>
+
+  </div>
+</article>
+ 
+<!-- 下面添加 Gitalk 部分 -->
+
+
+<!-- valine Comments -->
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+<!-- <script src="https://cdn.fayne.cn/js/Valine.min.js"></script> -->
+<div id="vcomments" style="margin-top: 30px"></div>
+<script type="text/javascript">
+  new Valine({
+    el: "#vcomments",
+    appId: "5Ah2dYXOOS7ryWdhr9z0BP9h-gzGzoHsz",
+    appKey: "JxuAq1gr9Q2b54FVIAj0bIcp",
+    avatar: "retro",
+    placeholder: "说点什么？证明你来过 ~",
+    pageSize: 10,
+  });
+</script>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Archives</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="https://github.com/alileew">Projects</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/archives/34379/"
+      ><i class="fab fa-facebook fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/archives/34379/&text=echarts 基础属性配置单"
+      ><i class="fab fa-twitter fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/archives/34379/&title=echarts 基础属性配置单"
+      ><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/archives/34379/&is_video=false&description=echarts 基础属性配置单"
+      ><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      href="mailto:?subject=echarts 基础属性配置单&body=Check out this article: http://example.com/archives/34379/"
+      ><i class="fas fa-envelope fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/archives/34379/&title=echarts 基础属性配置单"
+      ><i
+        class="fab fa-get-pocket fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/archives/34379/&title=echarts 基础属性配置单"
+      ><i class="fab fa-reddit fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/archives/34379/&title=echarts 基础属性配置单"
+      ><i
+        class="fab fa-stumbleupon fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/archives/34379/&title=echarts 基础属性配置单"
+      ><i class="fab fa-digg fa-lg" aria-hidden="true"></i
+    ></a>
+  </li>
+  <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/archives/34379/&name=echarts 基础属性配置单&description="
+      ><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i
+    ></a>
+  </li> -->
+  <!-- <li>
+    <a
+      class="icon"
+      target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/archives/34379/&t=echarts 基础属性配置单"
+      ><i
+        class="fab fa-hacker-news fa-lg"
+        aria-hidden="true"
+      ></i
+    ></a>
+  </li> -->
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;   2021-2025
+    alileew
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       -->
+        <li>
+          <a href="/"
+            >Home</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/archives/"
+            >Archives</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a target="_blank" rel="noopener" href="https://github.com/alileew"
+            >Projects</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/tags/"
+            >Tags</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/about/"
+            >About</a
+          >
+        </li>
+        <!--
+     --><!--
+       -->
+        <li>
+          <a href="/search/"
+            >Search</a
+          >
+        </li>
+        <!--
+     -->
+      </ul>
+    </nav>
+  </div>
+  <div style="width: 100%; margin-top: 10px; text-align: center">
+    你的努力, 值得被更多人看见, 正如现在努力的你 
+    <!-- <span id="busuanzi_container_site_pv" style='display:none'>
+      <i class="fa fa-eye" aria-hidden="true"></i>
+      <span id="busuanzi_value_site_pv"></span>
+    </span>  -->
+    <!-- <span id="busuanzi_container_site_uv" style='display:none'>
+      <i class="fa fa-user" aria-hidden="true"></i>
+      <span id="busuanzi_value_site_uv"></span>
+    </span> -->
+  </div>
+</footer>
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+<!-- tag cloud 样式引入 -->
+<link
+  rel="stylesheet"
+  href="/css/tags.css"
+/>
+<link
+  rel="stylesheet"
+  href="/css/matery.css"
+/>
+<link
+  rel="stylesheet"
+  href="/css/markdown.css"
+/>
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- busuanzi -->
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a88fecc80aabf2ada5465a20";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+<script type="text/javascript">
+  var typed = new Typed('#home_faith', {
+    strings: ["坚持, 有常, 是成事的第一要素. 日日行, 不怕千万里. 常常做, 不怕千万事."],
+    typeSpeed: 100,
+    cursorChar: '',
+  });
+</script>
+<script type="text/javascript">
+  var typed = new Typed('#faith', {
+    strings: ["坚持, 有常, 是成事的第一要素. 日日行, 不怕千万里. 常常做, 不怕千万事."],
+    typeSpeed: 100,
+    cursorChar: '',
+  });
+</script>
+<script type="text/javascript">
+  var typed = new Typed('#text-slider', {
+    strings: ["你似乎来到了没有知识存在的荒原"],
+    typeSpeed: 100, // 打字速度
+    backSpeed: 50, // 回退速度(多个数组的时候，才生效)
+    cursorChar: '|',
+  });
+</script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
+</body>
+</html>
+<script type="text/javascript">
+  // 切换 背景主题
+  function switchNightMode() {
+    $("html").hasClass("LightMode")
+      ? ($("html").removeClass("LightMode"),
+        localStorage.setItem("themeMode", "dark"),
+        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o"))
+      : ($("html").addClass("LightMode"),
+        localStorage.setItem("themeMode", "white"),
+        $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o"))
+  }
+</script>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', (event) => {
+    (localStorage.getItem('themeMode') === 'dark') 
+      ? (
+        document.querySelector('html').classList.remove('dark'),
+        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o")
+      )
+      :(
+        $("html").addClass("LightMode"),
+        $("#nightMode").removeClass("fa-moon-o").addClass('fa-lightbulb-o')
+      )
+  })
+</script>
+<div onclick="switchNightMode()" id="sma" title="切换主题">
+  <i class="fa fa-moon-o" id="nightMode"  aria-hidden="false"></i>
+</div>
