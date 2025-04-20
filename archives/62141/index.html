@@ -771,10 +771,12 @@ git rebase -i cbb25868
     if ($("html").hasClass("LightMode")) {
       // 切换到暗黑模式
       $("html").removeClass("LightMode");
+      $("html").addClass("DarkMode");
       localStorage.setItem("themeMode", "dark");
       $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o");
     } else {
       // 切换到亮色模式
+      $("html").removeClass("DarkMode");
       $("html").addClass("LightMode");
       localStorage.setItem("themeMode", "white");
       $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o");
@@ -790,6 +792,7 @@ git rebase -i cbb25868
     } else {
       // 默认暗黑模式
       $("html").removeClass("LightMode");
+      $("html").addClass("DarkMode");
       $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o");
     }
   })

@@ -111,7 +111,7 @@
         <div class="tag-cloud">
           <div class="tag-cloud-title"></div>
           <div class="tag-cloud-tags" style="text-align: left">
-            <a href="/tags/Ant-Design/" style="font-size: 14px;">Ant Design</a> <a href="/tags/AntD/" style="font-size: 14px;">AntD</a> <a href="/tags/HTTP/" style="font-size: 14px;">HTTP</a> <a href="/tags/JS/" style="font-size: 14px;">JS</a> <a href="/tags/React/" style="font-size: 17px;">React</a> <a href="/tags/React-Hooks/" style="font-size: 14px;">React Hooks</a> <a href="/tags/Vue/" style="font-size: 14px;">Vue</a> <a href="/tags/blog/" style="font-size: 14px;">blog</a> <a href="/tags/echarts/" style="font-size: 14px;">echarts</a> <a href="/tags/git/" style="font-size: 20px;">git</a> <a href="/tags/react/" style="font-size: 14px;">react</a> <a href="/tags/react-redux/" style="font-size: 14px;">react-redux</a> <a href="/tags/redux/" style="font-size: 14px;">redux</a> <a href="/tags/shell/" style="font-size: 14px;">shell</a> <a href="/tags/vue/" style="font-size: 14px;">vue</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 14px;">垃圾回收</a> <a href="/tags/%E5%A4%A7%E5%B1%8F%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 14px;">大屏可视化</a> <a href="/tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" style="font-size: 14px;">年终总结</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/" style="font-size: 14px;">浏览器缓存</a>
+            <a href="/tags/Ant-Design/" style="font-size: 14px;">Ant Design</a> <a href="/tags/AntD/" style="font-size: 14px;">AntD</a> <a href="/tags/HTTP/" style="font-size: 14px;">HTTP</a> <a href="/tags/JS/" style="font-size: 14px;">JS</a> <a href="/tags/React/" style="font-size: 17px;">React</a> <a href="/tags/React-Hooks/" style="font-size: 14px;">React Hooks</a> <a href="/tags/Vue/" style="font-size: 14px;">Vue</a> <a href="/tags/blog/" style="font-size: 14px;">blog</a> <a href="/tags/echarts/" style="font-size: 14px;">echarts</a> <a href="/tags/git/" style="font-size: 20px;">git</a> <a href="/tags/react/" style="font-size: 14px;">react</a> <a href="/tags/react-redux/" style="font-size: 14px;">react-redux</a> <a href="/tags/redux/" style="font-size: 14px;">redux</a> <a href="/tags/shell/" style="font-size: 14px;">shell</a> <a href="/tags/vue/" style="font-size: 14px;">vue</a> <a href="/tags/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" style="font-size: 14px;">垃圾回收</a> <a href="/tags/%E5%A4%A7%E5%B1%8F%E5%8F%AF%E8%A7%86%E5%8C%96/" style="font-size: 14px;">大屏可视化</a> <a href="/tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/" style="font-size: 14px;">年终总结</a> <a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8%E7%BC%93%E5%AD%98/" style="font-size: 14px;">浏览器缓存</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 14px;">生活</a>
           </div>
         </div>
       </div>
@@ -428,10 +428,12 @@
     if ($("html").hasClass("LightMode")) {
       // 切换到暗黑模式
       $("html").removeClass("LightMode");
+      $("html").addClass("DarkMode");
       localStorage.setItem("themeMode", "dark");
       $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o");
     } else {
       // 切换到亮色模式
+      $("html").removeClass("DarkMode");
       $("html").addClass("LightMode");
       localStorage.setItem("themeMode", "white");
       $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o");
@@ -447,6 +449,7 @@
     } else {
       // 默认暗黑模式
       $("html").removeClass("LightMode");
+      $("html").addClass("DarkMode");
       $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o");
     }
   })

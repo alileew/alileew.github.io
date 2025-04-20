@@ -63,6 +63,16 @@
   color: #555;
 }
 
+.DarkMode #vcomments .vpanel .vwrap {
+  border: 1px solid #363636;
+}
+.DarkMode #vcomments .vwrap .vheader .vinput {
+  border-bottom-color: #363636;
+}
+.DarkMode #vcomments .vwrap .vrow .vbtn {
+  border: 1px solid #363636;
+}
+
 /* 深色模式按钮设置 */
 #sma {
   background: #fff;

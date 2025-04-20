@@ -98,6 +98,8 @@
     <span id="actions">
       <ul>
         
+        <li><a class="icon" aria-label="上一篇" href="/archives/50314/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
         
         <li><a class="icon" aria-label="下一篇" href="/archives/34379/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
@@ -1034,10 +1036,12 @@ export function useGetResizeHeight(
     if ($("html").hasClass("LightMode")) {
       // 切换到暗黑模式
       $("html").removeClass("LightMode");
+      $("html").addClass("DarkMode");
       localStorage.setItem("themeMode", "dark");
       $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o");
     } else {
       // 切换到亮色模式
+      $("html").removeClass("DarkMode");
       $("html").addClass("LightMode");
       localStorage.setItem("themeMode", "white");
       $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o");
@@ -1053,6 +1057,7 @@ export function useGetResizeHeight(
     } else {
       // 默认暗黑模式
       $("html").removeClass("LightMode");
+      $("html").addClass("DarkMode");
       $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o");
     }
   })
