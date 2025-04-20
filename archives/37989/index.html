@@ -624,28 +624,32 @@
 <script type="text/javascript">
   // 切换 背景主题
   function switchNightMode() {
-    $("html").hasClass("LightMode")
-      ? ($("html").removeClass("LightMode"),
-        localStorage.setItem("themeMode", "dark"),
-        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o"))
-      : ($("html").addClass("LightMode"),
-        localStorage.setItem("themeMode", "white"),
-        $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o"))
+    if ($("html").hasClass("LightMode")) {
+      // 切换到暗黑模式
+      $("html").removeClass("LightMode");
+      localStorage.setItem("themeMode", "dark");
+      $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o");
+    } else {
+      // 切换到亮色模式
+      $("html").addClass("LightMode");
+      localStorage.setItem("themeMode", "white");
+      $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o");
+    }
   }
 </script>
 <script type="text/javascript">
   document.addEventListener('DOMContentLoaded', (event) => {
-    (localStorage.getItem('themeMode') === 'dark') 
-      ? (
-        document.querySelector('html').classList.remove('dark'),
-        $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o")
-      )
-      :(
-        $("html").addClass("LightMode"),
-        $("#nightMode").removeClass("fa-moon-o").addClass('fa-lightbulb-o')
-      )
+    // 只检查是否明确设置为 white，否则默认为暗黑模式
+    if (localStorage.getItem('themeMode') === 'white') {
+      $("html").addClass("LightMode");
+      $("#nightMode").removeClass("fa-lightbulb-o").addClass("fa-moon-o");
+    } else {
+      // 默认暗黑模式
+      $("html").removeClass("LightMode");
+      $("#nightMode").removeClass("fa-moon-o").addClass("fa-lightbulb-o");
+    }
   })
 </script>
 <div onclick="switchNightMode()" id="sma" title="切换主题">
-  <i class="fa fa-moon-o" id="nightMode"  aria-hidden="false"></i>
+  <i class="fa fa-lightbulb-o" id="nightMode" aria-hidden="false"></i>
 </div>
